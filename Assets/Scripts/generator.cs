@@ -5,6 +5,7 @@ using UnityEngine;
 public class generator : MonoBehaviour {
 
 	[SerializeField] GameObject floor;
+	[SerializeField] GameObject building; //container
 
 	//limits
 	float minSize, maxSize;
@@ -20,10 +21,7 @@ public class generator : MonoBehaviour {
 	List <GameObject> furnitureList = new List <GameObject> ();
 
 	//for random gen parameters
-	float peopleRange;
-	float furnitureRange;
-	float sizeRange;
-	float treesRange;
+	[SerializeField] Dictionary<string, float> paraValues;
 
 	//loaded from resources
 	GameObject[] people;
@@ -39,6 +37,9 @@ public class generator : MonoBehaviour {
 		trees = Resources.LoadAll<GameObject> ("trees");
 //		roofStuff = Resources.LoadAll<GameObject> ("roofStuff");
 		furnitures = Resources.LoadAll<GameObject> ("furniture");
+
+//		parameters = new Dictionary<string, float> ();
+//		parameters.Add ("floors", 0);
 	}
 	
 	// Update is called once per frame
@@ -73,10 +74,6 @@ public class generator : MonoBehaviour {
 	}
 
 	void generate(){
-//		peopleRange = 	Random.Range (0f, 1f);
-//		furnitureRange=	Random.Range (0f, 1f);
-//		sizeRange = 	Random.Range (0f, 1f);
-//		treesRange = 	Random.Range (0f, 1f);
 
 		// size  -- - - - - - - - - - - - - - - -- 
 		int numFloors = 5;
@@ -91,12 +88,14 @@ public class generator : MonoBehaviour {
 			GameObject f = Instantiate(floor, Vector3.zero, Quaternion.identity);
 			f.transform.localScale = new Vector3 (sizeX, 0.1f, sizeZ);
 			f.transform.position += new Vector3 (0f, i*floorHeight, 0f);
+			f.transform.parent = building.transform;
 			floors.Add (f);
 		}
 
 		for (int i = 0; i < numPpl; i++) {
 			GameObject p = Instantiate(people[Random.Range(0,people.Length)], Vector3.zero, Quaternion.identity);
 			p.transform.position += new Vector3 (sizeX*0.5f - Random.Range(0f,sizeX), Random.Range(0,numFloors)*floorHeight+1.0f, sizeZ*0.5f - Random.Range(0f,sizeZ));
+			p.transform.parent = building.transform;
 			peopleList.Add (p);
 		}
 
@@ -104,6 +103,7 @@ public class generator : MonoBehaviour {
 			GameObject t = Instantiate(trees[Random.Range(0,trees.Length)], Vector3.zero, Quaternion.identity);
 			t.transform.position += new Vector3 (sizeX*0.5f -Random.Range(0f,sizeX), Random.Range(0,numFloors)*floorHeight+2.0f, sizeZ*0.5f - Random.Range(0f,sizeZ));
 			t.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+			t.transform.parent = building.transform;
 			treesList.Add (t);
 		}
 
@@ -111,6 +111,7 @@ public class generator : MonoBehaviour {
 			GameObject f = Instantiate(furnitures[Random.Range(0,furnitures.Length)], Vector3.zero, Quaternion.identity);
 			f.transform.position += new Vector3 (sizeX*0.5f -Random.Range(0f,sizeX), Random.Range(0,numFloors)*floorHeight+1.0f, sizeZ*0.5f - Random.Range(0f,sizeZ));
 			f.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+			f.transform.parent = building.transform;
 			furnitureList.Add (f);
 		}
 
