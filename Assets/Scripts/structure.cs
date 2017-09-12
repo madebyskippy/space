@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class structure : MonoBehaviour {
 
-	// Use this for initialization
+	[SerializeField] GameObject beam;
+	[SerializeField] GameObject floor;
+
 	void Start () {
 		
 	}
