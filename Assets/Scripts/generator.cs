@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class generator : MonoBehaviour {
 
+	[SerializeField] selector inputs;
+
+	//prefab
 	[SerializeField] GameObject floor;
-	[SerializeField] GameObject building; //container
+	//loaded from resources
+	GameObject[] people;
+	GameObject[] trees;
+	GameObject[] furnitures;
+
+	[SerializeField] GameObject building; //container for the thing
 
 	//limits
 	float minSize, maxSize;
@@ -13,21 +21,11 @@ public class generator : MonoBehaviour {
 	float minFurnitureSize, maxFurnitureSize;
 	float minTreeSize, maxTreeSize;
 
-	//keep track of 
-	List<GameObject> floors = new List <GameObject> ();
-	List <GameObject> peopleList = new List <GameObject> ();
-	List <GameObject> treesList = new List <GameObject> ();
-//	List <GameObject> roofStuffList = new List<GameObject> ();
-	List <GameObject> furnitureList = new List <GameObject> ();
+	//the actual objects to keep track of 
+	List<List<GameObject>> objects = new List<List<GameObject>>();
 
 	//for random gen parameters
-	[SerializeField] Dictionary<string, float> paraValues;
-
-	//loaded from resources
-	GameObject[] people;
-	GameObject[] trees;
-//	GameObject[] roofStuff;
-	GameObject[] furnitures;
+	Dictionary<string, float> paraValues;
 
 	float floorHeight = 3f;
 
@@ -35,11 +33,13 @@ public class generator : MonoBehaviour {
 	void Start () {
 		people = Resources.LoadAll<GameObject> ("people");
 		trees = Resources.LoadAll<GameObject> ("trees");
-//		roofStuff = Resources.LoadAll<GameObject> ("roofStuff");
 		furnitures = Resources.LoadAll<GameObject> ("furniture");
 
-//		parameters = new Dictionary<string, float> ();
-//		parameters.Add ("floors", 0);
+		paraValues = new Dictionary<string, float> ();
+		for (int i = 0; i < globalpara.Instance.getNumPara (); i++) {
+			paraValues.Add (globalpara.Instance.getParameter(i), 0);
+			objects.Add (new List<GameObject> ());
+		}
 	}
 	
 	// Update is called once per frame
@@ -47,56 +47,55 @@ public class generator : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			delete ();
 			clear ();
+			getValues ();
 			generate ();
 		}
 	}
 
+	void getValues(){
+		for (int i = 0; i < paraValues.Count; i++) {
+			paraValues [globalpara.Instance.getParameter (i)] = inputs.getValue (i);
+		}
+	}
+
 	void delete(){
-		foreach (GameObject g in floors) {
-			Destroy (g);
-		}
-		foreach (GameObject g in peopleList) {
-			Destroy (g);
-		}
-		foreach (GameObject g in treesList) {
-			Destroy (g);
-		}
-		foreach (GameObject g in furnitureList) {
-			Destroy (g);
+		for (int i = 0; i < objects.Count; i++) {
+			for (int j = 0; j < objects [i].Count; j++) {
+				Destroy (objects [i] [j]);
+			}
 		}
 	}
 
 	void clear(){
-		floors.Clear ();
-		peopleList.Clear ();
-		treesList.Clear ();
-		furnitureList.Clear ();
+		for (int i = 0; i < objects.Count; i++) {
+			objects [i].Clear ();
+		}
 	}
 
 	void generate(){
 
 		// size  -- - - - - - - - - - - - - - - -- 
-		int numFloors = 5;
-		int numPpl = 10;
-		int numTrees = 10;
-		int numFurn = 10;
+		int numFloors = (int)(paraValues["floors"] * 10);
+		int numPpl = (int)(paraValues["people"] * 40);
+		int numTrees = (int)(paraValues["trees"] * 100);
+		int numFurn = (int)(paraValues["furniture"] * 50);
 
-		float sizeX = 7.5f;
-		float sizeZ = 7.5f;
+		float sizeX = 1f + paraValues["size"] * 10f;
+		float sizeZ = 1f + paraValues["size"] * 10f;
 
 		for (int i = 0; i < numFloors; i++) {
 			GameObject f = Instantiate(floor, Vector3.zero, Quaternion.identity);
 			f.transform.localScale = new Vector3 (sizeX, 0.1f, sizeZ);
 			f.transform.position += new Vector3 (0f, i*floorHeight, 0f);
 			f.transform.parent = building.transform;
-			floors.Add (f);
+			objects [1].Add (f);
 		}
 
 		for (int i = 0; i < numPpl; i++) {
 			GameObject p = Instantiate(people[Random.Range(0,people.Length)], Vector3.zero, Quaternion.identity);
 			p.transform.position += new Vector3 (sizeX*0.5f - Random.Range(0f,sizeX), Random.Range(0,numFloors)*floorHeight+1.0f, sizeZ*0.5f - Random.Range(0f,sizeZ));
 			p.transform.parent = building.transform;
-			peopleList.Add (p);
+			objects[2].Add(p);
 		}
 
 		for (int i = 0; i < numTrees; i++) {
@@ -104,7 +103,7 @@ public class generator : MonoBehaviour {
 			t.transform.position += new Vector3 (sizeX*0.5f -Random.Range(0f,sizeX), Random.Range(0,numFloors)*floorHeight+2.0f, sizeZ*0.5f - Random.Range(0f,sizeZ));
 			t.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 			t.transform.parent = building.transform;
-			treesList.Add (t);
+			objects[3].Add(t);
 		}
 
 		for (int i = 0; i < numFurn; i++) {
@@ -112,7 +111,7 @@ public class generator : MonoBehaviour {
 			f.transform.position += new Vector3 (sizeX*0.5f -Random.Range(0f,sizeX), Random.Range(0,numFloors)*floorHeight+1.0f, sizeZ*0.5f - Random.Range(0f,sizeZ));
 			f.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 			f.transform.parent = building.transform;
-			furnitureList.Add (f);
+			objects[4].Add(f);
 		}
 
 	}

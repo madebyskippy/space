@@ -15,8 +15,8 @@ public class selector : MonoBehaviour {
 	[SerializeField] GameObject slider;
 	[SerializeField] GameObject line;
 
-	GameObject[] icons;
 	GameObject[] lines;
+	GameObject[] icons;
 
 	//for display
 	float radius = 125;
@@ -30,19 +30,14 @@ public class selector : MonoBehaviour {
 		//set up pentagon
 		float angle = 2f * Mathf.PI / numParameters;
 		for (int i = 0; i < numParameters; i++) {
-//
-//			GameObject lmid = Instantiate(line);
-//			lmid.transform.parent = this.gameObject.transform;
-//
-//			lmid.GetComponent<LineRenderer> ().SetPosition (0, this.transform.TransformPoint(new Vector3(radius+offsetx,radius+offsety,0)));
-//			lmid.GetComponent<LineRenderer> ().SetPosition (1, icon [i].transform.position);
 
 			GameObject s = Instantiate (slider,Vector3.zero, Quaternion.identity);
 			s.transform.parent = this.transform;
 			s.transform.localPosition = new Vector3 (radius + offsetx, radius + offsety, 0f);
 			s.transform.localScale = new Vector3 (0.75f, 0.75f, 0.75f);
 			s.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, angle * i * Mathf.Rad2Deg));
-			s.GetComponent<icon> ().seticon ("floor");//global.getParameter(i));
+			string p = globalpara.Instance.getParameter (i);
+			s.GetComponent<icon> ().seticon (p);
 			icons [i] = s;
 
 			if (i > 0) {
@@ -69,7 +64,7 @@ public class selector : MonoBehaviour {
 	void drawlines(){
 		float angle = 2f * Mathf.PI / numParameters;
 		for (int i = 1; i < numParameters; i++) {
-			float x1 = radius + offsetx + radius * Mathf.Cos (angle * (i - 1)) * icons [i - 1].GetComponent<icon> ().getVal ();
+			float x1 = radius + offsetx + radius * Mathf.Cos (angle * (i - 1)) * icons[i-1].GetComponent<icon> ().getVal ();
 			float y1 = radius + offsety + radius * Mathf.Sin (angle * (i - 1)) * icons [i - 1].GetComponent<icon> ().getVal ();
 			float x2 = radius + offsetx + radius * Mathf.Cos (angle * (i)) * icons [i].GetComponent<icon> ().getVal ();
 			float y2 = radius + offsety + radius * Mathf.Sin (angle * (i)) * icons [i].GetComponent<icon> ().getVal ();
@@ -82,5 +77,9 @@ public class selector : MonoBehaviour {
 		x = radius + offsetx + radius * icons [0].GetComponent<icon> ().getVal ();
 		y = radius + offsety;
 		lines[numParameters-1].GetComponent<LineRenderer> ().SetPosition (1, this.transform.TransformPoint(new Vector3(x,y,0f)));
+	}
+
+	public float getValue(int i){
+		return icons [i].GetComponent<icon> ().getVal ();
 	}
 }
