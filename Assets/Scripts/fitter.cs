@@ -113,12 +113,12 @@ public class fitter : MonoBehaviour {
 	}
 
 	void randomPlacement(int level){
-		//		while (full_floor [level] < (r * c) - 1) {
-//			step (level);
-//		}
-		for (int i = 0; i < r * c; i++) {
+		while (full_floor [level] < (r * c)*0.75f) {
 			step (level);
 		}
+//		for (int i = 0; i < r * c; i++) {
+//			step (level);
+//		}
 	}
 
 	void sequentialPlacement(){
