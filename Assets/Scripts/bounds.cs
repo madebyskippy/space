@@ -16,9 +16,9 @@ public class bounds : MonoBehaviour {
 
 	GameObject[,,] grid;
 
-	int bottomlimit = 2;
-	int toplimit = 4;
-
+	[SerializeField] int bottomlimit = 2;
+	[SerializeField] int toplimit = 6;
+		
 	int stepcount;
 
 	// Use this for initialization
@@ -73,7 +73,7 @@ public class bounds : MonoBehaviour {
 					}if (k < h - 1) {
 						count += grid [i, j, k+1].activeSelf ? 1 : 0;
 					}
-					if (count > toplimit || count < bottomlimit) {
+					if (count >= toplimit || count <= bottomlimit) {
 						//DEAD!!!!!!!!1
 						Debug.Log("dead "+count);
 						grid[i,j,k].SetActive(false);
