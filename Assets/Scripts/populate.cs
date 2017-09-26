@@ -9,6 +9,12 @@ public class populate : MonoBehaviour {
 	List<LineRenderer> roomOutlines = new List <LineRenderer> ();
 
 	[SerializeField] GameObject outlinePrefab;
+	[SerializeField] GameObject personPrefab;
+
+	[SerializeField] List <Sprite> peopleSprites = new List <Sprite> ();
+
+	[SerializeField] int nrPeople = 10;
+
 
 
 	void Awake () {
@@ -30,15 +36,29 @@ public class populate : MonoBehaviour {
 	}
 
 	void Populate() {
-		
+		PopPeople ();
 	}
 
 	void PopPeople() {
-		
+		// populate witch people
+		for (int i = 0; i < rooms.Count; i++) {
+			for (int j = 0; j < nrPeople; j++) {
+				Vector3 newPos = new Vector3 (
+					rooms [i].transform.position.x + Random.Range (-rooms [i].transform.localScale.x / 2, rooms [i].transform.localScale.x / 2),
+					rooms [i].transform.position.y -  rooms[i].transform.localScale.y/2 + 1,
+					rooms [i].transform.position.z + Random.Range (-rooms [i].transform.localScale.z / 2, rooms [i].transform.localScale.z / 2)
+				);
+				GameObject newPerson = Instantiate (personPrefab, newPos, Quaternion.identity);
+				newPerson.GetComponent<SpriteRenderer> ().sprite = peopleSprites [Random.Range (0, peopleSprites.Count)];
+					
+			}
+		}
 	}
+
 	// create line renderer outlines for rooms
 	void Outline () {
 		for (int i = 0; i < rooms.Count; i++) {
+			// get vertex info of room meshs
 			Mesh mesh = rooms[i].GetComponent<MeshFilter> ().mesh;
 			List<Vector3> cornerPoints = new List <Vector3> ();
 			mesh.GetVertices (cornerPoints);
@@ -46,7 +66,7 @@ public class populate : MonoBehaviour {
 				cornerPoints [j] = rooms[i].transform.TransformPoint (cornerPoints [j]);
 			}
 
-			//generate floor
+			//generate floor outlines
 			GameObject floorOutlineGO = Instantiate(outlinePrefab, rooms[i].transform.position, Quaternion.identity);
 			LineRenderer floorLine = floorOutlineGO.GetComponent<LineRenderer> ();
 			roomOutlines.Add (floorLine);
@@ -57,7 +77,7 @@ public class populate : MonoBehaviour {
 			floorLine.SetPosition (3,cornerPoints[0]);
 			floorLine.SetPosition (4,cornerPoints[1]);
 
-			// generate ceiling
+			// generate ceiling outlines
 			GameObject ceilingOutlineGO = Instantiate(outlinePrefab, rooms[i].transform.position, Quaternion.identity);
 			LineRenderer ceilingLine = ceilingOutlineGO.GetComponent<LineRenderer> ();
 			roomOutlines.Add (ceilingLine);
@@ -68,7 +88,7 @@ public class populate : MonoBehaviour {
 			ceilingLine.SetPosition (3,cornerPoints[2]);
 			ceilingLine.SetPosition (4,cornerPoints[3]);
 
-			// generate walls
+			// generate walls outlines
 			GameObject wallOutline1 = Instantiate(outlinePrefab, rooms[i].transform.position, Quaternion.identity);
 			LineRenderer wallLine1 = wallOutline1.GetComponent<LineRenderer> ();
 			roomOutlines.Add (wallLine1);
