@@ -10,12 +10,20 @@ public class populate : MonoBehaviour {
 
 	[SerializeField] GameObject outlinePrefab;
 	[SerializeField] GameObject personPrefab;
+	[SerializeField] GameObject greenPrefab;
 
 	[SerializeField] List <Sprite> peopleSprites = new List <Sprite> ();
+	[SerializeField] List <Sprite> greenSprites = new List <Sprite> ();
 
 	[Range(0, 10)]
 	[SerializeField] int nrPeople;
 
+	[Range(0, 10)]
+	[SerializeField] int nrGreen;
+
+
+	List<GameObject> currentPeople = new List <GameObject> ();
+	List<GameObject> currentGreen = new List <GameObject> ();
 
 
 	void Awake () {
@@ -23,10 +31,7 @@ public class populate : MonoBehaviour {
 		rooms.AddRange(GameObject.FindGameObjectsWithTag ("Room"));
 	}
 
-	void Start () {
-		
-	}
-	
+
 
 	void Update () {
 		if (Input.GetButtonDown ("Jump")) {
@@ -38,12 +43,36 @@ public class populate : MonoBehaviour {
 
 	void Populate() {
 		PopPeople ();
+		PopGreen ();
+	}
+
+	void PopGreen() {
+		// populate witch green
+		for (int i = 0; i < rooms.Count; i++) {
+			float sizeModifier = (rooms [i].transform.localScale.x * rooms [i].transform.localScale.y * rooms [i].transform.localScale.z)*0.05f;
+			// green to create depending on nr green and size of rooms
+			float greenToCreate = nrPeople * sizeModifier;
+			for (int j = 0; j < greenToCreate; j++) {
+				Vector3 newPos = new Vector3 (
+					rooms [i].transform.position.x + Random.Range (-rooms [i].transform.localScale.x / 2, rooms [i].transform.localScale.x / 2),
+					rooms [i].transform.position.y -  rooms[i].transform.localScale.y/2 + 1,
+					rooms [i].transform.position.z + Random.Range (-rooms [i].transform.localScale.z / 2, rooms [i].transform.localScale.z / 2)
+				);
+				GameObject newGreen = Instantiate (greenPrefab, newPos, Quaternion.identity);
+				newGreen.GetComponent<SpriteRenderer> ().sprite = greenSprites [Random.Range (0, greenSprites.Count)];
+				currentGreen.Add (newGreen);
+
+			}
+		}
 	}
 
 	void PopPeople() {
 		// populate witch people
 		for (int i = 0; i < rooms.Count; i++) {
-			for (int j = 0; j < nrPeople; j++) {
+			float sizeModifier = (rooms [i].transform.localScale.x * rooms [i].transform.localScale.y * rooms [i].transform.localScale.z)*0.05f;
+			// people to create depending on nr people and size of rooms
+			float peopleToCreate = nrPeople * sizeModifier;
+			for (int j = 0; j < peopleToCreate; j++) {
 				Vector3 newPos = new Vector3 (
 					rooms [i].transform.position.x + Random.Range (-rooms [i].transform.localScale.x / 2, rooms [i].transform.localScale.x / 2),
 					rooms [i].transform.position.y -  rooms[i].transform.localScale.y/2 + 1,
@@ -51,6 +80,7 @@ public class populate : MonoBehaviour {
 				);
 				GameObject newPerson = Instantiate (personPrefab, newPos, Quaternion.identity);
 				newPerson.GetComponent<SpriteRenderer> ().sprite = peopleSprites [Random.Range (0, peopleSprites.Count)];
+				currentPeople.Add (newPerson);
 					
 			}
 		}
