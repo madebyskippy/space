@@ -13,7 +13,8 @@ public class populate : MonoBehaviour {
 
 	[SerializeField] List <Sprite> peopleSprites = new List <Sprite> ();
 
-	[SerializeField] int nrPeople = 10;
+	[Range(0, 10)]
+	[SerializeField] int nrPeople;
 
 
 
