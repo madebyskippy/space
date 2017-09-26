@@ -22,8 +22,8 @@ public class fitter : MonoBehaviour {
 	bool[,,] full; //whether or not that grid space is full
 	int[] numRooms; //num of rooms on the floor
 
-	int r=10;
-	int c=10;
+	int r=5;
+	int c=5;
 	int h=10;
 
 	List<GameObject> rooms;
@@ -50,7 +50,7 @@ public class fitter : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			delete ();
 			clear ();
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < h; i++) {
 				randomPlacement (i);
 			}
 		}
@@ -85,7 +85,7 @@ public class fitter : MonoBehaviour {
 
 		for (int i = 0; i < sizex; i++) {
 			for (int j = 0; j < sizez; j++) {
-				if (full [posx+i, level, posz+j]) {
+				if (full [posx+i, posz+j,level]) {
 					placed = false;
 					Debug.Log ("overlap");
 					return placed;
@@ -95,15 +95,21 @@ public class fitter : MonoBehaviour {
 			
 		GameObject t = Instantiate (cube, new Vector3 (0,0,0), Quaternion.identity);
 		GameObject p = new GameObject ();
-		p.transform.position = new Vector3 (-1 * r*0.5f, 0, -1 * c*0.5f);
+		p.transform.position = new Vector3 ((-1*r*0.5f)+posx, level, (-1*c*0.5f)+posz);
 		t.transform.parent = p.transform;
-		t.transform.localPosition = new Vector3 (sizex * 0.5f-0.5f+posx, level/* +sizey*0.25f */, sizez * 0.5f-0.5f+posz);
+		t.transform.localPosition = new Vector3 (sizex * 0.5f,sizey*0.5f,sizez*0.5f);//-0.5f+posx, level +sizey*0.25f, sizez * 0.5f-0.5f+posz);
 		p.transform.parent = group.transform;
 		t.transform.localScale = new Vector3 (t.transform.localScale.x*sizex,t.transform.localScale.y*sizey,t.transform.localScale.z*sizez);
 		rooms.Add (p);
+		int heightmax = sizey;
+		if (h-level < sizey){
+			heightmax = h-level;
+		}
 		for (int i = 0; i < sizex; i++) {
 			for (int j = 0; j < sizez; j++) {
-				full [posx+i, level, posz+j] = true;
+				for (int k = 0; k < heightmax; k++){
+					full [posx+i, posz+j, level+k ] = true;
+				}
 			}
 		}
 		numRooms [level]++;
@@ -111,10 +117,7 @@ public class fitter : MonoBehaviour {
 	}
 
 	void randomPlacement(int level){
-//		while (numRooms [level] < rooms_min) {
-//			step (level);
-//		}
-		for (int i = 0; i < r * c; i++) {
+		for (int i = 0; i < 100; i++) {
 			step (level);
 		}
 	}
