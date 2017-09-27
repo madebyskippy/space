@@ -5,10 +5,7 @@ using UnityEngine;
 public class fitter : MonoBehaviour {
 
 	/*
-	 * need a class to keep track of the "tetronimos" ? 
-	 * -try as rect prism first (randomly generate on the spot)
-	 * start from layer 1, place a block, place a block next to it, etc
-	 * or randomly try to place a block until you can't anymore
+	 * problems: how to control space density?
 	 */
 
 	[SerializeField] GameObject cube;
@@ -17,14 +14,12 @@ public class fitter : MonoBehaviour {
 	//eventually parameters that user controls
 	int size_max=5;
 	int size_min=1;
-	int rooms_min = 7;
-
-	bool[,,] full; //whether or not that grid space is full
-	int[] numRooms; //num of rooms on the floor
-
 	int r=5;
 	int c=5;
 	int h=10;
+
+	bool[,,] full; //whether or not that grid space is full
+	int[] numRooms; //num of rooms on the floor 				-- currently not in use
 
 	List<GameObject> rooms;
 
@@ -97,7 +92,7 @@ public class fitter : MonoBehaviour {
 		GameObject p = new GameObject ();
 		p.transform.position = new Vector3 ((-1*r*0.5f)+posx, level, (-1*c*0.5f)+posz);
 		t.transform.parent = p.transform;
-		t.transform.localPosition = new Vector3 (sizex * 0.5f,sizey*0.5f,sizez*0.5f);//-0.5f+posx, level +sizey*0.25f, sizez * 0.5f-0.5f+posz);
+		t.transform.localPosition = new Vector3 (sizex*0.5f,sizey*0.5f,sizez*0.5f);
 		p.transform.parent = group.transform;
 		t.transform.localScale = new Vector3 (t.transform.localScale.x*sizex,t.transform.localScale.y*sizey,t.transform.localScale.z*sizez);
 		rooms.Add (p);
