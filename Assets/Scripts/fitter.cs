@@ -42,22 +42,26 @@ public class fitter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			delete ();
-			clear ();
-			for (int i = 0; i < h; i++) {
-				randomPlacement (i);
-			}
-		}
 
-		group.transform.Rotate (new Vector3 (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"), 0));
+
 	}
 
+	public void create(){
+		delete ();
+		clear ();
+		for (int i = 0; i < h; i++) {
+			randomPlacement (i);
+		}
+	}
+
+	//deletes actual game objects
 	void delete(){
 		for (int i = 0; i < rooms.Count; i++) {
 			Destroy (rooms [i]);
 		}
 	}
+
+	//clears lists and status lists
 	void clear(){
 		rooms.Clear ();
 		for (int i = 0; i < r; i++) {
@@ -70,7 +74,7 @@ public class fitter : MonoBehaviour {
 		}
 	}
 
-	bool step(int level){
+	bool place(int level){
 		bool placed = true;
 		int sizex = Random.Range (size_min, size_max);
 		int sizez = Random.Range (size_min, size_max);
@@ -82,7 +86,7 @@ public class fitter : MonoBehaviour {
 			for (int j = 0; j < sizez; j++) {
 				if (full [posx+i, posz+j,level]) {
 					placed = false;
-					Debug.Log ("overlap");
+//					Debug.Log ("overlap");
 					return placed;
 				}
 			}
@@ -95,7 +99,7 @@ public class fitter : MonoBehaviour {
 		t.transform.localPosition = new Vector3 (sizex*0.5f,sizey*0.5f,sizez*0.5f);
 		p.transform.parent = group.transform;
 		t.transform.localScale = new Vector3 (t.transform.localScale.x*sizex,t.transform.localScale.y*sizey,t.transform.localScale.z*sizez);
-		rooms.Add (p);
+		rooms.Add (t);
 		int heightmax = sizey;
 		if (h-level < sizey){
 			heightmax = h-level;
@@ -113,10 +117,11 @@ public class fitter : MonoBehaviour {
 
 	void randomPlacement(int level){
 		for (int i = 0; i < 100; i++) {
-			step (level);
+			place (level);
 		}
 	}
 
-	void sequentialPlacement(){
+	public List<GameObject> getRooms(){
+		return rooms;
 	}
 }

@@ -27,26 +27,29 @@ public class populate : MonoBehaviour {
 
 
 	void Awake () {
-
-		rooms.AddRange(GameObject.FindGameObjectsWithTag ("Room"));
+//		rooms.AddRange(GameObject.FindGameObjectsWithTag ("Room"));
 	}
 
 
 
 	void Update () {
-		if (Input.GetButtonDown ("Jump")) {
-			Outline ();
-			Populate ();
-
-		}
+//		if (Input.GetKeyDown(KeyCode.P)) {
+//			Outline ();
+//			Populate ();
+//		}
 	}
 
-	void Populate() {
-		PopPeople ();
-		PopGreen ();
+	public void setRooms(List<GameObject> r){
+		rooms = r;
 	}
 
-	void PopGreen() {
+	public void Populate(GameObject parent) {
+		Debug.Log ("populating");
+		PopPeople (parent);
+		PopGreen (parent);
+	}
+
+	void PopGreen(GameObject parent) {
 		// populate witch green
 		for (int i = 0; i < rooms.Count; i++) {
 			float sizeModifier = (rooms [i].transform.localScale.x * rooms [i].transform.localScale.y * rooms [i].transform.localScale.z)*0.05f;
@@ -60,13 +63,14 @@ public class populate : MonoBehaviour {
 				);
 				GameObject newGreen = Instantiate (greenPrefab, newPos, Quaternion.identity);
 				newGreen.GetComponent<SpriteRenderer> ().sprite = greenSprites [Random.Range (0, greenSprites.Count)];
+				newGreen.transform.parent = parent.transform;
 				currentGreen.Add (newGreen);
 
 			}
 		}
 	}
 
-	void PopPeople() {
+	void PopPeople(GameObject parent) {
 		// populate witch people
 		for (int i = 0; i < rooms.Count; i++) {
 			float sizeModifier = (rooms [i].transform.localScale.x * rooms [i].transform.localScale.y * rooms [i].transform.localScale.z)*0.05f;
@@ -80,6 +84,7 @@ public class populate : MonoBehaviour {
 				);
 				GameObject newPerson = Instantiate (personPrefab, newPos, Quaternion.identity);
 				newPerson.GetComponent<SpriteRenderer> ().sprite = peopleSprites [Random.Range (0, peopleSprites.Count)];
+				newPerson.transform.parent = parent.transform;
 				currentPeople.Add (newPerson);
 					
 			}
@@ -87,7 +92,7 @@ public class populate : MonoBehaviour {
 	}
 
 	// create line renderer outlines for rooms
-	void Outline () {
+	public void Outline () {
 		for (int i = 0; i < rooms.Count; i++) {
 			// get vertex info of room meshs
 			Mesh mesh = rooms[i].GetComponent<MeshFilter> ().mesh;
