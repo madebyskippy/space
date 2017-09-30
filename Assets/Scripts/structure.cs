@@ -4,15 +4,44 @@ using UnityEngine;
 
 public class structure : MonoBehaviour {
 
+	List<GameObject> rooms = new List <GameObject> ();
+
 	[SerializeField] GameObject beam;
 	[SerializeField] GameObject floor;
+	[Range(0.1f, 0.5f)]
+	[SerializeField] float floorThickness;
+	[Range(-0.5f, 0.5f)]
+	[SerializeField] float floorOffsetSize;
 
-	void Start () {
-		
+	[SerializeField] GameObject column;
+
+	List<GameObject> floors = new List <GameObject> ();
+
+
+	void Awake () {
+		rooms.AddRange(GameObject.FindGameObjectsWithTag ("Room"));
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
-		
+		if (Input.GetKeyDown(KeyCode.P)) {
+						 
+					}
+	}
+
+	void GenerateFloors() {
+		for (int i = 0; i < rooms.Count; i++) {
+			Vector3 buildPos = new Vector3 (
+				rooms[i].transform.position.x,
+				rooms[i].transform.position.y - rooms[i].transform.position.y/2f + floorThickness/2f,
+				rooms[i].transform.position.z
+			);
+			GameObject newFloor = Instantiate (floor, buildPos, Quaternion.identity);
+			floors.Add (newFloor);
+			newFloor.transform.localScale = new Vector3 (
+				rooms[i].transform.localScale.x + floorOffsetSize,
+				floorThickness,
+				rooms[i].transform.localScale.z + floorOffsetSize
+			);
+		}
 	}
 }

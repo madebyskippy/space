@@ -6,6 +6,7 @@ public class manager : MonoBehaviour {
 
 	[SerializeField] fitter roomfitter;
 	[SerializeField] populate populator; 
+	[SerializeField] outlines outliner;
 
 
 	[SerializeField] GameObject building; 
@@ -23,7 +24,7 @@ public class manager : MonoBehaviour {
 		}if (Input.GetKeyDown (KeyCode.P)) {
 			populator.Populate (building);
 		}if (Input.GetKeyDown (KeyCode.O)) {
-			populator.Outline ();
+			outliner.CreateOutlines ();
 		}
 
 		//temp ugly rotating
