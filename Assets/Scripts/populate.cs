@@ -51,7 +51,7 @@ public class populate : MonoBehaviour {
 		for (int i = 0; i < rooms.Count; i++) {
 			float sizeModifier = (rooms [i].transform.localScale.x * rooms [i].transform.localScale.y * rooms [i].transform.localScale.z)*0.05f;
 			// green to create depending on nr green and size of rooms
-			float greenToCreate = nrPeople * sizeModifier;
+			float greenToCreate = nrGreen * sizeModifier;
 			for (int j = 0; j < greenToCreate; j++) {
 				Vector3 newPos = new Vector3 (
 					rooms [i].transform.position.x + Random.Range (-rooms [i].transform.localScale.x / 2, rooms [i].transform.localScale.x / 2),
