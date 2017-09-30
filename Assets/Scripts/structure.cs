@@ -22,10 +22,8 @@ public class structure : MonoBehaviour {
 		rooms.AddRange(GameObject.FindGameObjectsWithTag ("Room"));
 	}
 
-	void Update () {
-		if (Input.GetKeyDown(KeyCode.P)) {
-						 
-					}
+	public void CreateStructures () {
+		GenerateFloors ();
 	}
 
 	void GenerateFloors() {
@@ -43,5 +41,9 @@ public class structure : MonoBehaviour {
 				rooms[i].transform.localScale.z + floorOffsetSize
 			);
 		}
+	}
+
+	public void ClearStructures () {
+		floors.ForEach (Destroy);
 	}
 }

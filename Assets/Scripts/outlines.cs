@@ -76,4 +76,8 @@ public class outlines : MonoBehaviour {
 		}
 
 	}
+
+	public void ClearOutlines () {
+		roomOutlines.ForEach (Destroy);
+	}
 }

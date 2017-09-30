@@ -7,16 +7,12 @@ public class manager : MonoBehaviour {
 	[SerializeField] fitter roomfitter;
 	[SerializeField] populate populator; 
 	[SerializeField] outlines outliner;
+	[SerializeField] structure structurer;
 
 
 	[SerializeField] GameObject building; 
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			roomfitter.create ();
@@ -26,8 +22,21 @@ public class manager : MonoBehaviour {
 		}if (Input.GetKeyDown (KeyCode.O)) {
 			outliner.CreateOutlines ();
 		}
+		if (Input.GetKeyDown (KeyCode.S)) {
+			structurer.CreateStructures ();
+		}
+
+		// temp function to delete everything
+		if (Input.GetKeyDown (KeyCode.C)) {
+			ClearEverything ();
+		}
 
 		//temp ugly rotating
 		building.transform.Rotate (new Vector3 (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"), 0));
+	}
+
+	void ClearEverything () {
+		outliner.ClearOutlines ();
+		structurer.ClearStructures ();
 	}
 }
