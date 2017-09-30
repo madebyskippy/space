@@ -5,10 +5,7 @@ using UnityEngine;
 public class fitter : MonoBehaviour {
 
 	/*
-	 * need a class to keep track of the "tetronimos" ? 
-	 * -try as rect prism first (randomly generate on the spot)
-	 * start from layer 1, place a block, place a block next to it, etc
-	 * or randomly try to place a block until you can't anymore
+	 * problems: how to control space density?
 	 */
 
 	[SerializeField] GameObject cube;
@@ -17,14 +14,12 @@ public class fitter : MonoBehaviour {
 	//eventually parameters that user controls
 	int size_max=5;
 	int size_min=1;
-	int rooms_min = 7;
-
-	bool[,,] full; //whether or not that grid space is full
-	int[] numRooms; //num of rooms on the floor
-
 	int r=5;
 	int c=5;
 	int h=10;
+
+	bool[,,] full; //whether or not that grid space is full
+	int[] numRooms; //num of rooms on the floor 				-- currently not in use
 
 	List<GameObject> rooms;
 
@@ -47,22 +42,26 @@ public class fitter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			delete ();
-			clear ();
-			for (int i = 0; i < h; i++) {
-				randomPlacement (i);
-			}
-		}
 
-		group.transform.Rotate (new Vector3 (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"), 0));
+
 	}
 
+	public void create(){
+		delete ();
+		clear ();
+		for (int i = 0; i < h; i++) {
+			randomPlacement (i);
+		}
+	}
+
+	//deletes actual game objects
 	void delete(){
 		for (int i = 0; i < rooms.Count; i++) {
 			Destroy (rooms [i]);
 		}
 	}
+
+	//clears lists and status lists
 	void clear(){
 		rooms.Clear ();
 		for (int i = 0; i < r; i++) {
@@ -75,7 +74,7 @@ public class fitter : MonoBehaviour {
 		}
 	}
 
-	bool step(int level){
+	bool place(int level){
 		bool placed = true;
 		int sizex = Random.Range (size_min, size_max);
 		int sizez = Random.Range (size_min, size_max);
@@ -87,7 +86,7 @@ public class fitter : MonoBehaviour {
 			for (int j = 0; j < sizez; j++) {
 				if (full [posx+i, posz+j,level]) {
 					placed = false;
-					Debug.Log ("overlap");
+//					Debug.Log ("overlap");
 					return placed;
 				}
 			}
@@ -97,10 +96,10 @@ public class fitter : MonoBehaviour {
 		GameObject p = new GameObject ();
 		p.transform.position = new Vector3 ((-1*r*0.5f)+posx, level, (-1*c*0.5f)+posz);
 		t.transform.parent = p.transform;
-		t.transform.localPosition = new Vector3 (sizex * 0.5f,sizey*0.5f,sizez*0.5f);//-0.5f+posx, level +sizey*0.25f, sizez * 0.5f-0.5f+posz);
+		t.transform.localPosition = new Vector3 (sizex*0.5f,sizey*0.5f,sizez*0.5f);
 		p.transform.parent = group.transform;
 		t.transform.localScale = new Vector3 (t.transform.localScale.x*sizex,t.transform.localScale.y*sizey,t.transform.localScale.z*sizez);
-		rooms.Add (p);
+		rooms.Add (t);
 		int heightmax = sizey;
 		if (h-level < sizey){
 			heightmax = h-level;
@@ -118,10 +117,11 @@ public class fitter : MonoBehaviour {
 
 	void randomPlacement(int level){
 		for (int i = 0; i < 100; i++) {
-			step (level);
+			place (level);
 		}
 	}
 
-	void sequentialPlacement(){
+	public List<GameObject> getRooms(){
+		return rooms;
 	}
 }
