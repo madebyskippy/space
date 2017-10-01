@@ -22,9 +22,7 @@ public class manager : MonoBehaviour {
 		}if (Input.GetKeyDown (KeyCode.O)) {
 			outliner.CreateOutlines ();
 		}
-		if (Input.GetKeyDown (KeyCode.S)) {
-			structurer.CreateStructures ();
-		}
+
 
 		// temp function to delete everything
 		if (Input.GetKeyDown (KeyCode.C)) {
@@ -36,7 +34,5 @@ public class manager : MonoBehaviour {
 	}
 
 	void ClearEverything () {
-		outliner.ClearOutlines ();
-		structurer.ClearStructures ();
 	}
 }
