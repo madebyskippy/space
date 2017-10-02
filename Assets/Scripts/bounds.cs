@@ -5,6 +5,13 @@ using UnityEngine.UI;
 
 public class bounds : MonoBehaviour {
 
+	/*
+	 * as of 10/1/2017, we're not using this
+	 * 
+	 * this was conway game-of-life-3D attempt to build rooms
+	 * 
+	 */
+
 	[SerializeField] GameObject cube;
 	[SerializeField] GameObject group; //container
 

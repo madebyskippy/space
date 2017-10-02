@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class generator : MonoBehaviour {
 
+	/*
+	 * as of 10/1/2017, we're not using this
+	 * 
+	 * it was the very first very quick "look we can randomly generate stuff" test
+	 */
+
 	[SerializeField] selector inputs;
 
 	//prefab

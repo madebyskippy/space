@@ -57,7 +57,7 @@ public class fitter : MonoBehaviour {
 	//deletes actual game objects
 	void delete(){
 		for (int i = 0; i < rooms.Count; i++) {
-			Destroy (rooms [i]);
+			Destroy (rooms [i].transform.parent.gameObject);
 		}
 	}
 
@@ -99,6 +99,7 @@ public class fitter : MonoBehaviour {
 		t.transform.localPosition = new Vector3 (sizex*0.5f,sizey*0.5f,sizez*0.5f);
 		p.transform.parent = group.transform;
 		t.transform.localScale = new Vector3 (t.transform.localScale.x*sizex,t.transform.localScale.y*sizey,t.transform.localScale.z*sizez);
+		t.GetComponent<room> ().Init (new Vector3(sizex,sizez,sizey),(1.0f*level)/(h*1.0f),new Vector2(posx,posz));
 		rooms.Add (t);
 		int heightmax = sizey;
 		if (h-level < sizey){

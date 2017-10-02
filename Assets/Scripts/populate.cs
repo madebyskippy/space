@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class populate : MonoBehaviour {
 
+	/*
+	 * as of 10/1/2017, we're not using this
+	 * 
+	 * this generates stuff in every room
+	 * now we're letting each room handle itself separately
+	 */
+
 	List<GameObject> rooms = new List <GameObject> ();
 
 	[SerializeField] GameObject personPrefab;
