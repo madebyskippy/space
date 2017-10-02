@@ -19,13 +19,10 @@ public class room : MonoBehaviour {
 	int greenToCreate;
 	int peopleToCreate;
 
+	[SerializeField] GameObject outlinePrefab;
+
 	[SerializeField] GameObject greenPrefab;
 	[SerializeField] GameObject peoplePrefab;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 
 	public void Init(Vector3 d, float l, Vector2 loc){
 		dimensions = d;
@@ -39,16 +36,15 @@ public class room : MonoBehaviour {
 		peopleToCreate = (int)(5 - level * 5); //more people lower down
 
 		//generate stuff
-		greens ();
-		peoples ();
+		GenerateOutlines ();
+
+		GenerateGreens ();
+		GeneratePeoples ();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-	void greens(){
+
+	void GenerateGreens(){
 		for (int i = 0; i < greenToCreate; i++) {
 			GameObject newGreen = Instantiate (greenPrefab);
 			newGreen.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
@@ -60,7 +56,7 @@ public class room : MonoBehaviour {
 		}
 	}
 
-	void peoples(){
+	void GeneratePeoples(){
 		for (int i = 0; i < peopleToCreate; i++) {
 			GameObject newPpl = Instantiate (peoplePrefab);
 			newPpl.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
@@ -72,6 +68,64 @@ public class room : MonoBehaviour {
 		}
 	}
 
-	void furnitures(){
+	void GenerateFurniture(){
+	}
+
+	void GenerateOutlines () {
+		Mesh mesh = gameObject.GetComponent<MeshFilter> ().mesh;
+		List<Vector3> cornerPoints = new List <Vector3> ();
+		mesh.GetVertices (cornerPoints);
+		for (int j = 0; j < cornerPoints.Count; j++) {
+			cornerPoints [j] = gameObject.transform.TransformPoint (cornerPoints [j]);
+		}
+
+		//generate floor outlines
+		GameObject floorOutlineGO = Instantiate (outlinePrefab,gameObject.transform.position, Quaternion.identity);
+		floorOutlineGO.transform.parent = this.transform;
+		LineRenderer floorLine = floorOutlineGO.GetComponent<LineRenderer> ();
+		floorLine.positionCount = 5;
+		floorLine.SetPosition (0, cornerPoints [1]);
+		floorLine.SetPosition (1, cornerPoints [7]);
+		floorLine.SetPosition (2, cornerPoints [6]);
+		floorLine.SetPosition (3, cornerPoints [0]);
+		floorLine.SetPosition (4, cornerPoints [1]);
+
+		// generate ceiling outlines
+		GameObject ceilingOutlineGO = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
+		ceilingOutlineGO.transform.parent = this.transform;
+		LineRenderer ceilingLine = ceilingOutlineGO.GetComponent<LineRenderer> ();
+		ceilingLine.positionCount = 5;
+		ceilingLine.SetPosition (0, cornerPoints [3]);
+		ceilingLine.SetPosition (1, cornerPoints [5]);
+		ceilingLine.SetPosition (2, cornerPoints [4]);
+		ceilingLine.SetPosition (3, cornerPoints [2]);
+		ceilingLine.SetPosition (4, cornerPoints [3]);
+
+		// generate walls outlines
+		GameObject wallOutline1 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
+		wallOutline1.transform.parent = this.transform;
+		LineRenderer wallLine1 = wallOutline1.GetComponent<LineRenderer> ();
+		wallLine1.positionCount = 2;
+		wallLine1.SetPosition (0, cornerPoints [7]);
+		wallLine1.SetPosition (1, cornerPoints [5]);
+		GameObject wallOutline2 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
+		wallOutline2.transform.parent = this.transform;
+		LineRenderer wallLine2 = wallOutline2.GetComponent<LineRenderer> ();
+		wallLine2.positionCount = 2;
+		wallLine2.SetPosition (0, cornerPoints [6]);
+		wallLine2.SetPosition (1, cornerPoints [4]);
+		GameObject wallOutline3 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
+		wallOutline3.transform.parent = this.transform;
+		LineRenderer wallLine3 = wallOutline3.GetComponent<LineRenderer> ();
+		wallLine3.positionCount = 2;
+		wallLine3.SetPosition (0, cornerPoints [0]);
+		wallLine3.SetPosition (1, cornerPoints [2]);
+		GameObject wallOutline4 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
+		wallOutline4.transform.parent = this.transform;
+		LineRenderer wallLine4 = wallOutline4.GetComponent<LineRenderer> ();
+		wallLine4.positionCount = 2;
+		wallLine4.SetPosition (0, cornerPoints [1]);
+		wallLine4.SetPosition (1, cornerPoints [3]);
+
 	}
 }

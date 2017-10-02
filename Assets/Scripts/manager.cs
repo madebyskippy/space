@@ -5,9 +5,7 @@ using UnityEngine;
 public class manager : MonoBehaviour {
 
 	[SerializeField] fitter roomfitter;
-	[SerializeField] populate populator; 
-	[SerializeField] outlines outliner;
-	[SerializeField] structure structurer;
+
 
 
 	[SerializeField] GameObject building; 
@@ -16,23 +14,10 @@ public class manager : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			roomfitter.create ();
-			populator.setRooms (roomfitter.getRooms ());
-		}if (Input.GetKeyDown (KeyCode.P)) {
-			populator.Populate (building);
-		}if (Input.GetKeyDown (KeyCode.O)) {
-			outliner.CreateOutlines ();
+
 		}
-
-
-		// temp function to delete everything
-		if (Input.GetKeyDown (KeyCode.C)) {
-			ClearEverything ();
-		}
-
-		//temp ugly rotating
-//		building.transform.Rotate (new Vector3 (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"), 0));
+			
 	}
 
-	void ClearEverything () {
-	}
+
 }
