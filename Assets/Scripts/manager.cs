@@ -30,7 +30,7 @@ public class manager : MonoBehaviour {
 		}
 
 		//temp ugly rotating
-		building.transform.Rotate (new Vector3 (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"), 0));
+//		building.transform.Rotate (new Vector3 (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"), 0));
 	}
 
 	void ClearEverything () {
