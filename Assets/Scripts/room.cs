@@ -16,18 +16,32 @@ public class room : MonoBehaviour {
 	float level; //how high it is relative to whole building height. this is a %
 	Vector2 location; //the xy of the room on the level
 
+	// structure parameters
+	float floorThickness;
+	float floorOffsetSize;
+
 	int greenToCreate;
 	int peopleToCreate;
 
+	//outlines
 	[SerializeField] GameObject outlinePrefab;
-
+	//population stuff
 	[SerializeField] GameObject greenPrefab;
 	[SerializeField] GameObject peoplePrefab;
+	//structures
+	[SerializeField] GameObject beam;
+	[SerializeField] GameObject floor;
+	[SerializeField] GameObject column;
 
-	public void Init(Vector3 d, float l, Vector2 loc){
+
+
+	public void Init(Vector3 d, float l, Vector2 loc, float floorT, float floorS){ //temp structure parameters passed on to this function
 		dimensions = d;
 		level = l;
 		location = loc;
+
+		floorThickness = floorT;
+		floorOffsetSize = floorS;
 
 		/***	EDIT THESE TO ADJUST HOW MUCH STUFF GENERATES
 		 * 		ACCORDING TO THE SPECS OF THE ROOM  
@@ -40,37 +54,10 @@ public class room : MonoBehaviour {
 
 		GenerateGreens ();
 		GeneratePeoples ();
+
+		GenerateFloors ();
 	}
 	
-
-
-	void GenerateGreens(){
-		for (int i = 0; i < greenToCreate; i++) {
-			GameObject newGreen = Instantiate (greenPrefab);
-			newGreen.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
-			newGreen.transform.parent = this.transform;
-			float posy = -0.5f;
-			float posx = Random.Range(-0.5f,0.5f);
-			float posz = Random.Range(-0.5f,0.5f);
-			newGreen.transform.localPosition = new Vector3(posx,posy,posz);
-		}
-	}
-
-	void GeneratePeoples(){
-		for (int i = 0; i < peopleToCreate; i++) {
-			GameObject newPpl = Instantiate (peoplePrefab);
-			newPpl.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
-			newPpl.transform.parent = this.transform;
-			float posy = -0.5f;
-			float posx = Random.Range(-0.5f,0.5f);
-			float posz = Random.Range(-0.5f,0.5f);
-			newPpl.transform.localPosition = new Vector3(posx,posy,posz);
-		}
-	}
-
-	void GenerateFurniture(){
-	}
-
 	void GenerateOutlines () {
 		Mesh mesh = gameObject.GetComponent<MeshFilter> ().mesh;
 		List<Vector3> cornerPoints = new List <Vector3> ();
@@ -128,4 +115,51 @@ public class room : MonoBehaviour {
 		wallLine4.SetPosition (1, cornerPoints [3]);
 
 	}
+
+	void GenerateGreens(){
+		for (int i = 0; i < greenToCreate; i++) {
+			GameObject newGreen = Instantiate (greenPrefab);
+			newGreen.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
+			newGreen.transform.parent = this.transform;
+			float posy = -0.5f;
+			float posx = Random.Range(-0.5f,0.5f);
+			float posz = Random.Range(-0.5f,0.5f);
+			newGreen.transform.localPosition = new Vector3(posx,posy,posz);
+		}
+	}
+
+	void GeneratePeoples(){
+		for (int i = 0; i < peopleToCreate; i++) {
+			GameObject newPpl = Instantiate (peoplePrefab);
+			newPpl.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
+			newPpl.transform.parent = this.transform;
+			float posy = -0.5f;
+			float posx = Random.Range(-0.5f,0.5f);
+			float posz = Random.Range(-0.5f,0.5f);
+			newPpl.transform.localPosition = new Vector3(posx,posy,posz);
+		}
+	}
+
+	void GenerateFurniture(){
+	}
+
+	void GenerateFloors() {
+
+		Vector3 buildPos = new Vector3 (
+			transform.position.x,
+			transform.position.y - transform.localScale.y/2f + floorThickness/2f,
+			transform.position.z
+		);
+		GameObject newFloor = Instantiate (floor, buildPos, Quaternion.identity);
+
+		newFloor.transform.localScale = new Vector3 (
+			transform.localScale.x + floorOffsetSize,
+			floorThickness,
+			transform.localScale.z + floorOffsetSize
+		);
+		newFloor.transform.parent = this.transform;
+
+	}
+
+
 }

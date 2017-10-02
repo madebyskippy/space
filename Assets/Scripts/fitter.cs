@@ -18,6 +18,14 @@ public class fitter : MonoBehaviour {
 	int c=5;
 	int h=10;
 
+	//temp controls for adjusting some parameters
+
+	[Range(0.1f, 0.5f)]
+	[SerializeField] float floorThickness = 0.3f;
+	[Range(-1f, 1f)]
+	[SerializeField] float floorOffsetSize = 0f;
+
+
 	bool[,,] full; //whether or not that grid space is full
 	int[] numRooms; //num of rooms on the floor 				-- currently not in use
 
@@ -40,11 +48,7 @@ public class fitter : MonoBehaviour {
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
 
-
-	}
 
 	public void create(){
 		delete ();
@@ -99,7 +103,7 @@ public class fitter : MonoBehaviour {
 		t.transform.localPosition = new Vector3 (sizex*0.5f,sizey*0.5f,sizez*0.5f);
 		p.transform.parent = group.transform;
 		t.transform.localScale = new Vector3 (t.transform.localScale.x*sizex,t.transform.localScale.y*sizey,t.transform.localScale.z*sizez);
-		t.GetComponent<room> ().Init (new Vector3(sizex,sizez,sizey),(1.0f*level)/(h*1.0f),new Vector2(posx,posz));
+		t.GetComponent<room> ().Init (new Vector3(sizex,sizez,sizey),(1.0f*level)/(h*1.0f),new Vector2(posx,posz),floorThickness,floorOffsetSize);
 		rooms.Add (t);
 		int heightmax = sizey;
 		if (h-level < sizey){
