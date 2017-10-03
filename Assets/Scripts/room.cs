@@ -20,8 +20,13 @@ public class room : MonoBehaviour {
 	float floorThickness;
 	float floorOffsetSize;
 
+	float columnThickness = 0.05f;
+	float columnDistance = 1f;
+
 	int greenToCreate;
 	int peopleToCreate;
+
+	List<GameObject> columns = new List <GameObject> ();
 
 	//outlines
 	[SerializeField] GameObject outlinePrefab;
@@ -29,9 +34,9 @@ public class room : MonoBehaviour {
 	[SerializeField] GameObject greenPrefab;
 	[SerializeField] GameObject peoplePrefab;
 	//structures
-	[SerializeField] GameObject beam;
-	[SerializeField] GameObject floor;
-	[SerializeField] GameObject column;
+	[SerializeField] GameObject beamPrefab;
+	[SerializeField] GameObject floorPrefab;
+	[SerializeField] GameObject columnPrefab;
 
 
 
@@ -55,7 +60,8 @@ public class room : MonoBehaviour {
 		GenerateGreens ();
 		GeneratePeoples ();
 
-		GenerateFloors ();
+		BuildFloors ();
+		BuildColumns ();
 	}
 	
 	void GenerateOutlines () {
@@ -143,14 +149,14 @@ public class room : MonoBehaviour {
 	void GenerateFurniture(){
 	}
 
-	void GenerateFloors() {
+	void BuildFloors() {
 
 		Vector3 buildPos = new Vector3 (
 			transform.position.x,
 			transform.position.y - transform.localScale.y/2f + floorThickness/2f,
 			transform.position.z
 		);
-		GameObject newFloor = Instantiate (floor, buildPos, Quaternion.identity);
+		GameObject newFloor = Instantiate (floorPrefab, buildPos, Quaternion.identity);
 
 		newFloor.transform.localScale = new Vector3 (
 			transform.localScale.x + floorOffsetSize,
@@ -159,6 +165,154 @@ public class room : MonoBehaviour {
 		);
 		newFloor.transform.parent = this.transform;
 
+	}
+
+	public void BuildColumns ()
+	{
+
+		// create corners ----------------------------
+
+		Vector3 t_buildingBase1 = new Vector3 (transform.position.x - transform.localScale.x / 2, 
+			transform.position.y,
+			transform.position.z - transform.localScale.z / 2);
+
+		GameObject newColumn1 = Instantiate (columnPrefab, t_buildingBase1, Quaternion.identity);
+
+		Vector3 t_buildingBase2 = new Vector3 (transform.position.x + transform.localScale.x / 2, 
+			transform.position.y,
+			transform.position.z + transform.localScale.z / 2);
+
+		GameObject newColumn2 = Instantiate (columnPrefab, t_buildingBase2, Quaternion.identity);
+
+		Vector3 t_buildingBase3 = new Vector3 (transform.position.x + transform.localScale.x / 2, 
+			transform.position.y,
+			transform.position.z - transform.localScale.z / 2);
+
+		GameObject newColumn3 = Instantiate (columnPrefab, t_buildingBase3, Quaternion.identity);
+
+		Vector3 t_buildingBase4 = new Vector3 (transform.position.x - transform.localScale.x / 2, 
+			transform.position.y,
+			transform.position.z + transform.localScale.z / 2);
+
+		GameObject newColumn4 = Instantiate (columnPrefab, t_buildingBase4, Quaternion.identity);
+
+
+		columns.Add (newColumn1);
+		columns.Add (newColumn2);
+		columns.Add (newColumn3);
+		columns.Add (newColumn4);
+
+
+		Vector3 t_buildBase5 = new Vector3 (transform.position.x - transform.localScale.x / 2, 
+			transform.position.y,
+			transform.position.z);
+
+		Vector3 t_buildBase6 = new Vector3 (transform.position.x + transform.localScale.x / 2, 
+			transform.position.y,
+			transform.position.z);
+
+		Vector3 t_buildBase7 = new Vector3 (transform.position.x, 
+			transform.position.y,
+			transform.position.z - transform.localScale.z / 2);
+
+		Vector3 t_buildBase8 = new Vector3 (transform.position.x, 
+			transform.position.y,
+			transform.position.z + transform.localScale.z / 2);
+
+
+		// build x rows - - - -- - - - - -- - - - -
+
+
+		for (int i = 0; i < Mathf.Floor (((transform.localScale.z / 2) - columnDistance / 2) / columnDistance); i++) {
+
+			Vector3 buildPosNeg1;
+			Vector3 buildPosPos1;
+
+			Vector3 buildPosNeg2;
+			Vector3 buildPosPos2;
+
+			if (i == 0) {
+
+				buildPosNeg1 = new Vector3 (t_buildBase5.x, t_buildBase5.y, t_buildBase5.z - columnDistance / 2);
+				buildPosPos1 = new Vector3 (t_buildBase5.x, t_buildBase5.y, t_buildBase5.z + columnDistance / 2);
+
+
+				buildPosNeg2 = new Vector3 (t_buildBase6.x, t_buildBase6.y, t_buildBase6.z - columnDistance / 2);
+				buildPosPos2 = new Vector3 (t_buildBase6.x, t_buildBase6.y, t_buildBase6.z + columnDistance / 2);
+
+
+			} else {
+				buildPosNeg1 = new Vector3 (t_buildBase5.x, t_buildBase5.y, t_buildBase5.z - columnDistance / 2 - columnDistance * i);
+				buildPosPos1 = new Vector3 (t_buildBase5.x, t_buildBase5.y, t_buildBase5.z + columnDistance / 2 + columnDistance * i);
+
+				buildPosNeg2 = new Vector3 (t_buildBase6.x, t_buildBase6.y, t_buildBase6.z - columnDistance / 2 - columnDistance * i);
+				buildPosPos2 = new Vector3 (t_buildBase6.x, t_buildBase6.y, t_buildBase6.z + columnDistance / 2 + columnDistance * i);
+			}
+
+			GameObject newColumnNeg1 = Instantiate (columnPrefab, buildPosNeg1, Quaternion.identity);
+			columns.Add (newColumnNeg1);
+			GameObject newColumnPos1 = Instantiate (columnPrefab, buildPosPos1, Quaternion.identity);
+			columns.Add (newColumnPos1);
+
+			GameObject newColumnNeg2 = Instantiate (columnPrefab, buildPosNeg2, Quaternion.identity);
+			columns.Add (newColumnNeg2);
+			GameObject newColumnPos2 = Instantiate (columnPrefab, buildPosPos2, Quaternion.identity);
+			columns.Add (newColumnPos2);
+
+
+
+
+		}
+
+		// build z rows - - - -- - - - - -- - - - -
+
+
+		for (int i = 0; i < Mathf.Floor (((transform.localScale.x / 2) - columnDistance / 2) / columnDistance); i++) {
+
+			Vector3 buildPosNeg1;
+			Vector3 buildPosPos1;
+
+			Vector3 buildPosNeg2;
+			Vector3 buildPosPos2;
+
+			if (i == 0) {
+
+				buildPosNeg1 = new Vector3 (t_buildBase7.x - columnDistance / 2, t_buildBase7.y, t_buildBase7.z);
+				buildPosPos1 = new Vector3 (t_buildBase7.x + columnDistance / 2, t_buildBase7.y, t_buildBase7.z);
+
+				buildPosNeg2 = new Vector3 (t_buildBase8.x - columnDistance / 2, t_buildBase8.y, t_buildBase8.z);
+				buildPosPos2 = new Vector3 (t_buildBase8.x + columnDistance / 2, t_buildBase8.y, t_buildBase8.z);
+
+
+			} else {
+				buildPosNeg1 = new Vector3 (t_buildBase7.x - columnDistance / 2 - columnDistance * i, t_buildBase7.y, t_buildBase7.z);
+				buildPosPos1 = new Vector3 (t_buildBase7.x + columnDistance / 2 + columnDistance * i, t_buildBase7.y, t_buildBase7.z);
+
+				buildPosNeg2 = new Vector3 (t_buildBase8.x - columnDistance / 2 - columnDistance * i, t_buildBase8.y, t_buildBase8.z);
+				buildPosPos2 = new Vector3 (t_buildBase8.x + columnDistance / 2 + columnDistance * i, t_buildBase8.y, t_buildBase8.z);
+			}
+
+			GameObject newColumnNeg1 = Instantiate (columnPrefab, buildPosNeg1, Quaternion.identity);
+			columns.Add (newColumnNeg1);
+			GameObject newColumnPos1 = Instantiate (columnPrefab, buildPosPos1, Quaternion.identity);
+			columns.Add (newColumnPos1);
+
+			GameObject newColumnNeg2 = Instantiate (columnPrefab, buildPosNeg2, Quaternion.identity);
+			columns.Add (newColumnNeg2);
+			GameObject newColumnPos2 = Instantiate (columnPrefab, buildPosPos2, Quaternion.identity);
+			columns.Add (newColumnPos2);
+
+		}
+
+
+		// scale columns -------------------------------
+
+		Vector3 t_Scale = new Vector3 (columnThickness, transform.localScale.y, columnThickness);
+
+		for (int i = 0; i < columns.Count; i++) {
+			columns [i].transform.localScale = t_Scale;
+			columns [i].transform.parent = this.transform;
+		}
 	}
 
 
