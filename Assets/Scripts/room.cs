@@ -23,7 +23,9 @@ public class room : MonoBehaviour {
 	float columnThickness = 0.05f;
 	float columnDistance = 1f;
 
-	float gridDivisions;
+	float beamThickness = 0.05f;
+
+	float gridDivisions = 0.1f;
 
 	int greenToCreate;
 	int peopleToCreate;
@@ -68,6 +70,7 @@ public class room : MonoBehaviour {
 
 		BuildFloors ();
 		BuildColumns ();
+		BuildBeams ();
 	}
 	
 	void GenerateOutlines () {
@@ -173,7 +176,7 @@ public class room : MonoBehaviour {
 
 	}
 
-	public void BuildColumns () {
+	void BuildColumns () {
 
 		// create corners ----------------------------
 
@@ -321,52 +324,52 @@ public class room : MonoBehaviour {
 		}
 	}
 
-//	public void BuildBeams (){
-//
-//			Vector3 buildBaseX = new Vector3 (transform.position.x - transform.localScale.x / 2,
-//				transform.position.y + transform.localScale.y / 2,
-//				transform.position.z);
-//
-//			Vector3 buildBaseZ = new Vector3 (transform.position.x,
-//				transform.position.y + transform.localScale.y / 2,
-//				transform.position.z- transform.localScale.z / 2);
-//
-//
-//			for (int j = 0; j < gridDivisions+1; j++) {
-//
-//				Vector3 newBuildPos = new Vector3 (buildBaseX.x + (transform.localScale.x / gridDivisions) * j,
-//					buildBaseX.y,
-//					buildBaseX.z);
-//				Vector3 newScale = new Vector3 (beamThickness, beamThickness, transform.localScale.z);
-//
-//				GameObject newBeam = Instantiate (beamPrefab, newBuildPos, Quaternion.identity);
-//				newGrid.transform.localScale = newScale;
-//				beams.Add (newBeam);
-//
-//
-//			}
-//
-//			for (int j = 0; j < gridDivisions+1; j++) {
-//
-//				Vector3 newBuildPos = new Vector3 (buildBaseZ.x ,
-//					buildBaseZ.y,
-//					buildBaseZ.z+ (transform.localScale.z / gridDivisions) * j);
-//				Vector3 newScale = new Vector3 (transform.localScale.x, beamThickness, beamThickness);
-//
-//				GameObject newGrid = Instantiate (beamGameObject, newBuildPos, Quaternion.identity);
-//				newGrid.transform.localScale = newScale;
-//				beams.Add (newGrid);
-//
-//
-//			}
-//
-//		for (int i = 0; i < beams.Count; i++) {
-//			beams [i].transform.parent = this.transform;
-//		}
+	void BuildBeams (){
+
+		Vector3 buildBaseX = new Vector3 (transform.localPosition.x - transform.localScale.x / 2,
+			transform.localPosition.y + transform.localScale.y / 2,
+			transform.localPosition.z);
+
+		Vector3 buildBaseZ = new Vector3 (transform.localPosition.x,
+			transform.localPosition.y + transform.localScale.y / 2,
+			transform.localPosition.z - transform.localScale.z / 2);
+
+
+		for (int j = 0; j < gridDivisions + 1; j++) {
+
+			Vector3 newBuildPos = new Vector3 (buildBaseX.x + (transform.localScale.x / gridDivisions) * j,
+				                       buildBaseX.y,
+				                       buildBaseX.z);
+			Vector3 newScale = new Vector3 (beamThickness, beamThickness, transform.localScale.z);
+
+			GameObject newBeam = Instantiate (beamPrefab, newBuildPos, Quaternion.identity);
+			newBeam.transform.localScale = newScale;
+			beams.Add (newBeam);
+
+
+		}
+
+		for (int j = 0; j < gridDivisions + 1; j++) {
+
+			Vector3 newBuildPos = new Vector3 (buildBaseZ.x,
+				                       buildBaseZ.y,
+				                       buildBaseZ.z + (transform.localScale.z / gridDivisions) * j);
+			Vector3 newScale = new Vector3 (transform.localScale.x, beamThickness, beamThickness);
+
+			GameObject newGrid = Instantiate (beamPrefab, newBuildPos, Quaternion.identity);
+			newGrid.transform.localScale = newScale;
+			beams.Add (newGrid);
+
+
+		}
+
+		for (int i = 0; i < beams.Count; i++) {
+			beams [i].transform.parent = this.transform;
+		}
 
 		
 
-//	}
+	}
 
 
 }
