@@ -25,7 +25,9 @@ public class room : MonoBehaviour {
 
 	float beamThickness = 0.05f;
 
-	float gridDivisions = 0.1f;
+	float gridDivisions;
+	float minGridDivisions = 1f;
+	float maxGridDivisions = 5f;
 
 	int greenToCreate;
 	int peopleToCreate;
@@ -326,13 +328,16 @@ public class room : MonoBehaviour {
 
 	void BuildBeams (){
 
+//		gridDivisions = Mathf.FloorToInt((maxGridDivisions - minGridDivisions) * value + minGridDivisions);
+		
+
 		Vector3 buildBaseX = new Vector3 (transform.localPosition.x - transform.localScale.x / 2,
-			transform.localPosition.y + transform.localScale.y / 2,
+			transform.localPosition.y - transform.localScale.y / 2 + transform.localScale.y,
 			transform.localPosition.z);
 
 		Vector3 buildBaseZ = new Vector3 (transform.localPosition.x,
-			transform.localPosition.y + transform.localScale.y / 2,
-			transform.localPosition.z - transform.localScale.z / 2);
+			transform.localPosition.y - transform.localScale.y / 2 + transform.localScale.y,
+			transform.localPosition.z / 2);
 
 
 		for (int j = 0; j < gridDivisions + 1; j++) {
@@ -367,7 +372,6 @@ public class room : MonoBehaviour {
 			beams [i].transform.parent = this.transform;
 		}
 
-		
 
 	}
 
