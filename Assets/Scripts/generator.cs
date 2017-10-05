@@ -43,7 +43,7 @@ public class generator : MonoBehaviour {
 
 		paraValues = new Dictionary<string, float> ();
 		for (int i = 0; i < globalpara.Instance.getNumPara (); i++) {
-			paraValues.Add (globalpara.Instance.getParameter(i), 0);
+			paraValues.Add (globalpara.Instance.getParameterName(i), 0);
 			objects.Add (new List<GameObject> ());
 		}
 	}
@@ -60,7 +60,7 @@ public class generator : MonoBehaviour {
 
 	void getValues(){
 		for (int i = 0; i < paraValues.Count; i++) {
-			paraValues [globalpara.Instance.getParameter (i)] = inputs.getValue (i);
+			paraValues [globalpara.Instance.getParameterName (i)] = inputs.getValue (i);
 		}
 	}
 

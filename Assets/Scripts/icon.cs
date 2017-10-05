@@ -23,6 +23,7 @@ public class icon : MonoBehaviour {
 
 	public void change (float v){
 		val = v;
+		globalpara.Instance.setValue (type, val);
 	}
 
 	public float getVal(){
