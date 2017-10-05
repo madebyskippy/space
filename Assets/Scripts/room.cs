@@ -68,7 +68,7 @@ public class room : MonoBehaviour {
 //		GenerateGreens ();
 //		GeneratePeoples ();
 
-//		BuildFloors ();
+		BuildFloors ();
 		BuildColumns ();
 		BuildBeams ();
 	}
@@ -331,8 +331,9 @@ public class room : MonoBehaviour {
 		float beamWidthSecond = 0.05f;
 		float beamHeightSecond = 0.1f;
 		float beamLengthOffset = 0f;
-		float gridDistance = 0.3f;
-		bool evenGrid = false;
+		float gridDistanceMain = 0.5f;
+		float gridDistanceSecond = 0.3f;
+		bool squareGrid = false;
 		// values depending on parameters
 		float beamHeightOffset = beamHeightSecond / 2;
 		float beamHeightX;
@@ -343,9 +344,17 @@ public class room : MonoBehaviour {
 		Material matZ;
 		float beamHeightOffsetX;
 		float beamHeightOffsetZ;
-		float gridDivisions;
-		// check which is main beam axis and change values accordingly
-		if (evenGrid) {
+		float gridDistanceX;
+		float gridDistanceZ;
+		int gridDivisionsMain = Mathf.FloorToInt(1f / gridDistanceMain);	// a bit funky, works if our room sizes are full unity unit sizes, no 1.3 or whatever
+		int gridDivisionsSecond = Mathf.FloorToInt(1f / gridDistanceSecond);
+		gridDistanceMain = 1f / gridDivisionsMain;
+		gridDistanceSecond = 1f / gridDivisionsSecond;
+		float gridDivisionsX;
+		float gridDivisionsZ;
+		// check which is main beam axis and change values accordingly (main axis is the longer direction of the room)
+		// square grid > no difference between x and z
+		if (squareGrid) {
 			beamHeightZ = beamHeightMain;
 			beamWidthZ = beamWidthMain;
 			beamHeightX = beamHeightMain;
@@ -354,6 +363,11 @@ public class room : MonoBehaviour {
 			beamHeightOffsetX = 0f;
 			matZ = mainBeamMat;
 			matX = mainBeamMat;
+			gridDistanceX = gridDistanceMain;
+			gridDistanceZ = gridDistanceMain;
+			gridDivisionsX = gridDivisionsMain;
+			gridDivisionsZ = gridDivisionsMain;
+
 		} else if (transform.localScale.z > transform.localScale.x) {
 			beamHeightZ = beamHeightMain;
 			beamWidthZ = beamWidthMain;
@@ -363,7 +377,11 @@ public class room : MonoBehaviour {
 			beamHeightOffsetX = 0f;
 			matZ = mainBeamMat;
 			matX = secondBeamMat;
-		} else {
+			gridDistanceZ = gridDistanceMain;
+			gridDistanceX = gridDistanceSecond;
+			gridDivisionsZ = gridDivisionsMain;
+			gridDivisionsX = gridDivisionsSecond;
+		} else { //x is also main axis if x and z dimensions of room are the same
 			beamHeightX = beamHeightMain;
 			beamWidthX = beamWidthMain;
 			beamHeightZ = beamHeightSecond;
@@ -372,6 +390,10 @@ public class room : MonoBehaviour {
 			beamHeightOffsetZ = 0f;
 			matX = mainBeamMat;
 			matZ = secondBeamMat;
+			gridDistanceX = gridDistanceMain;
+			gridDistanceZ = gridDistanceSecond;
+			gridDivisionsX = gridDivisionsMain;
+			gridDivisionsZ = gridDivisionsSecond;
 		}
 
 //		------> X - axis beams
@@ -379,23 +401,26 @@ public class room : MonoBehaviour {
 //		------>
 //		.  .  .
 //		------>
+
+		for (int i = 0; i < gridDivisionsX * transform.localScale.z +1f; i++) {
 	
-		Vector3 newBuildPosX = new Vector3 (
-			                       transform.position.x,
-			                       transform.position.y + transform.localScale.y /2,
-			                       transform.position.z - transform.localScale.z / 2);
+			Vector3 newBuildPosX = new Vector3 (
+				                       transform.position.x ,
+				                       transform.position.y + transform.localScale.y / 2 - beamHeightX / 2 - beamHeightOffsetX,
+				transform.position.z - transform.localScale.z / 2 + gridDistanceX * i);
 		
-		GameObject newBeamX = Instantiate (beamPrefab, newBuildPosX, Quaternion.identity);
-		newBeamX.GetComponent<MeshRenderer> ().material = matX;
+			GameObject newBeamX = Instantiate (beamPrefab, newBuildPosX, Quaternion.identity);
+			newBeamX.GetComponent<MeshRenderer> ().material = matX;
 
-		Vector3 newScaleX = new Vector3 (
-			                    transform.localScale.x + beamLengthOffset,
-			                    beamHeightX,
-			                    beamWidthX);
+			Vector3 newScaleX = new Vector3 (
+				                   transform.localScale.x + beamLengthOffset,
+				                   beamHeightX,
+				                   beamWidthX);
 		
-		newBeamX.transform.localScale = newScaleX;
+			newBeamX.transform.localScale = newScaleX;
 
-		newBeamX.transform.parent = this.transform;
+			newBeamX.transform.parent = this.transform;
+		}
 
 //		|	.	|
 //		|	.	|
@@ -405,22 +430,25 @@ public class room : MonoBehaviour {
 //		v		v
 //		Z - axis beams
 
-		Vector3 newBuildPosZ = new Vector3 (
-			transform.position.x - transform.localScale.x /2,
-			transform.position.y + transform.localScale.y / 2,
-			transform.position.z);
+		for (int i = 0; i < gridDivisionsZ * transform.localScale.x +1f; i++) {
 
-		GameObject newBeamZ = Instantiate (beamPrefab, newBuildPosZ, Quaternion.identity);
-		newBeamZ.GetComponent<MeshRenderer> ().material = matZ;
+			Vector3 newBuildPosZ = new Vector3 (
+				transform.position.x - transform.localScale.x / 2 + gridDistanceZ * i,
+				                       transform.position.y + transform.localScale.y / 2 - beamHeightZ / 2 - beamHeightOffsetZ,
+				                       transform.position.z );
 
-		Vector3 newScaleZ = new Vector3 (
-			beamWidthZ,
-			beamHeightZ,
-			transform.localScale.z + beamLengthOffset);
+			GameObject newBeamZ = Instantiate (beamPrefab, newBuildPosZ, Quaternion.identity);
+			newBeamZ.GetComponent<MeshRenderer> ().material = matZ;
 
-		newBeamZ.transform.localScale = newScaleZ;
+			Vector3 newScaleZ = new Vector3 (
+				                   beamWidthZ,
+				                   beamHeightZ,
+				                   transform.localScale.z + beamLengthOffset);
 
-		newBeamZ.transform.parent = this.transform;
+			newBeamZ.transform.localScale = newScaleZ;
+
+			newBeamZ.transform.parent = this.transform;
+		}
 
 
 //
