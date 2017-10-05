@@ -38,6 +38,7 @@ public class room : MonoBehaviour {
 	[SerializeField] GameObject beamPrefab;
 	[SerializeField] GameObject floorPrefab;
 	[SerializeField] GameObject columnPrefab;
+	[SerializeField] GameObject wall;
 
 	//test beams
 	[SerializeField] Material mainBeamMat;
@@ -69,6 +70,7 @@ public class room : MonoBehaviour {
 		GeneratePeoples ();
 
 		BuildFloors ();
+		BuildWalls ();
 		BuildColumns ();
 		BuildBeams ();
 	}
@@ -173,6 +175,29 @@ public class room : MonoBehaviour {
 			transform.localScale.z + floorOffsetSize
 		);
 		newFloor.transform.parent = this.transform;
+
+	}
+
+	void BuildWalls() {
+		
+//	-	.		
+//	|		.
+//	+	.
+// 	Z
+
+//		.	-	
+//	.		|
+//		.	+
+// 			Z
+
+//	-	_	+ X
+//	.		.
+//		.
+
+//		.	 
+//	.		.
+//	-	_	+ X
+
 
 	}
 
