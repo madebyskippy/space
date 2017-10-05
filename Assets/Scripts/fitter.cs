@@ -12,9 +12,9 @@ public class fitter : MonoBehaviour {
 	[SerializeField] GameObject group; //container
 
 	//eventually parameters that user controls
-	int size_max=5;
-	int size_min=1;
-	int r=5;
+	int size_max=5; //for room size
+	int size_min=1; //for room size
+	int r=5;		//for building
 	int c=5;
 	int h=10;
 
@@ -56,7 +56,11 @@ public class fitter : MonoBehaviour {
 
 	public void create(){
 		delete ();
-		h = (int) (height_max * globalpara.Instance.getValue ("height"));
+		h = Mathf.Max((int) (height_max * globalpara.Instance.getValue ("height")),1); //mathf.max so it'll never be 0
+		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue ("bounds")),1); //mathf.max so it'll never be 0
+		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue ("bounds")),1); //mathf.max so it'll never be 0
+		size_max = Mathf.Min(r,c);
+		Debug.Log(h+", "+r+", "+c);
 		clear ();
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
@@ -86,12 +90,13 @@ public class fitter : MonoBehaviour {
 
 	bool place(int level){
 		bool placed = true;
-		int sizex = Random.Range (size_min, size_max);
-		int sizez = Random.Range (size_min, size_max);
+		int sizex = Random.Range (size_min, size_max+1);
+		int sizez = Random.Range (size_min, size_max+1);
 		int sizey = Random.Range (size_min, size_max);
 		int posx = Random.Range (0, r - sizex+1);
 		int posz = Random.Range (0, c - sizez+1);
 
+		//checks if this spot is empty. if it isn't, cancel this
 		for (int i = 0; i < sizex; i++) {
 			for (int j = 0; j < sizez; j++) {
 				if (full [posx+i, posz+j,level]) {
