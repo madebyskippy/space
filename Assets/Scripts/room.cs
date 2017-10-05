@@ -65,8 +65,8 @@ public class room : MonoBehaviour {
 		//generate stuff
 		GenerateOutlines ();
 
-//		GenerateGreens ();
-//		GeneratePeoples ();
+		GenerateGreens ();
+		GeneratePeoples ();
 
 		BuildFloors ();
 		BuildColumns ();
