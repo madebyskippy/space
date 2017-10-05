@@ -7,6 +7,7 @@ public class globalpara : MonoBehaviour{
 	private static globalpara instance = null;
 
 	//========================================================================
+	//code help from hang ruan :-)
 	public static globalpara Instance {
 		get { 
 			return instance;
@@ -23,20 +24,32 @@ public class globalpara : MonoBehaviour{
 	}
 	//========================================================================
 
-	private string[] parameters = {
-		"size",
-		"floors",
-		"people",
-		"trees",
-		"furniture"
+
+	private Dictionary<string, float> parameters = new Dictionary<string, float>(){
+		{"bounds",			1f },	//building bounds (length width)
+		{"height",			1f },	//building height
+		{"fidelity", 		1f },	//room fidelity
+		{"chaos",			1f },	//room symmetry/randomness
+		{"density", 		1f },	//room density 
+		{"cohesion",		1f } 	//coheisveness of types of structure
 	};
 
-	public string getParameter (int i) {
-		return parameters [i];
+	public string getParameterName (int i) {
+		string[] pkeys = new string[parameters.Count];
+		parameters.Keys.CopyTo (pkeys, 0);
+		return pkeys [i];
+	}
+
+	public void setValue (string para, float val){
+		parameters [para] = val;
+	}
+
+	public float getValue (string para){
+		return parameters[para];
 	}
 
 	public int getNumPara(){
-		return parameters.Length;
+		return parameters.Count;
 	}
 
 }
