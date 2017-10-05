@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class icon : MonoBehaviour {
+
+	[SerializeField] Text label;
 
 	string type;
 
@@ -14,6 +17,7 @@ public class icon : MonoBehaviour {
 
 	public void seticon(string ptype){
 		type = ptype;
+		label.text = type;
 	}
 	
 	// Update is called once per frame

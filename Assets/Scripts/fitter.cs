@@ -18,6 +18,10 @@ public class fitter : MonoBehaviour {
 	int c=5;
 	int h=10;
 
+	[SerializeField] int height_max;
+	[SerializeField] int row_max;
+	[SerializeField] int col_max;
+
 	//temp controls for adjusting some parameters
 
 	[Range(0.1f, 0.5f)]
@@ -33,10 +37,13 @@ public class fitter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		initialize ();
+	}
+
+	void initialize(){
 		full = new bool[r, c, h];
 		numRooms = new int[h];
 		rooms = new List<GameObject> ();
-		//so i can see what's happening
 		for (int i=0; i<r; i++){
 			for (int j = 0; j < c; j++) {
 				for (int k = 0; k < h; k++) {
@@ -45,13 +52,11 @@ public class fitter : MonoBehaviour {
 				}
 			}
 		}
-		
 	}
-	
-
 
 	public void create(){
 		delete ();
+		h = (int) (height_max * globalpara.Instance.getValue ("height"));
 		clear ();
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
@@ -67,15 +72,16 @@ public class fitter : MonoBehaviour {
 
 	//clears lists and status lists
 	void clear(){
+		initialize();
 		rooms.Clear ();
-		for (int i = 0; i < r; i++) {
-			for (int j = 0; j < c; j++) {
-				for (int k = 0; k < h; k++) {
-					numRooms [k] = 0;
-					full [i, j, k] = false;
-				}
-			}
-		}
+//		for (int i = 0; i < r; i++) {
+//			for (int j = 0; j < c; j++) {
+//				for (int k = 0; k < h; k++) {
+//					numRooms [k] = 0;
+//					full [i, j, k] = false;
+//				}
+//			}
+//		}
 	}
 
 	bool place(int level){
