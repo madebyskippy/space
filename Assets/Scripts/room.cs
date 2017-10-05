@@ -39,6 +39,10 @@ public class room : MonoBehaviour {
 	[SerializeField] GameObject floorPrefab;
 	[SerializeField] GameObject columnPrefab;
 
+	//test beams
+	[SerializeField] Material mainBeamMat;
+	[SerializeField] Material secondBeamMat;
+
 
 
 	public void Init(Vector3 d, float l, Vector2 loc, float floorT, float floorS){ //temp structure parameters passed on to this function
@@ -59,12 +63,12 @@ public class room : MonoBehaviour {
 		peopleToCreate = (int)(5 - level * 5); //more people lower down
 
 		//generate stuff
-//		GenerateOutlines ();
+		GenerateOutlines ();
 
 //		GenerateGreens ();
 //		GeneratePeoples ();
 
-		BuildFloors ();
+//		BuildFloors ();
 		BuildColumns ();
 		BuildBeams ();
 	}
@@ -321,36 +325,73 @@ public class room : MonoBehaviour {
 	}
 
 	void BuildBeams (){
-
-		float beamWidth = 0.05f;
-		float beamHeight = 0.2f;
-		float beamLengthOffset = 3f;
-		float beamHeightOffset = beamHeight / 2;
-
-		float gridDivisions;
+		// adjustable parameters for beams
+		float beamWidthMain = 0.1f;
+		float beamHeightMain = 0.2f;
+		float beamWidthSecond = 0.05f;
+		float beamHeightSecond = 0.1f;
+		float beamLengthOffset = 0f;
 		float gridDistance = 0.3f;
-		float minGridDivisions = 1f;
-		float maxGridDivisions = 5f;
+		bool evenGrid = false;
+		// values depending on parameters
+		float beamHeightOffset = beamHeightSecond / 2;
+		float beamHeightX;
+		float beamWidthX;
+		float beamHeightZ;
+		float beamWidthZ;
+		Material matX;
+		Material matZ;
+		float beamHeightOffsetX;
+		float beamHeightOffsetZ;
+		float gridDivisions;
+		// check which is main beam axis and change values accordingly
+		if (evenGrid) {
+			beamHeightZ = beamHeightMain;
+			beamWidthZ = beamWidthMain;
+			beamHeightX = beamHeightMain;
+			beamWidthX = beamWidthMain;
+			beamHeightOffsetZ = 0f;
+			beamHeightOffsetX = 0f;
+			matZ = mainBeamMat;
+			matX = mainBeamMat;
+		} else if (transform.localScale.z > transform.localScale.x) {
+			beamHeightZ = beamHeightMain;
+			beamWidthZ = beamWidthMain;
+			beamHeightX = beamHeightSecond;
+			beamWidthX = beamWidthSecond;
+			beamHeightOffsetZ = beamHeightOffset;
+			beamHeightOffsetX = 0f;
+			matZ = mainBeamMat;
+			matX = secondBeamMat;
+		} else {
+			beamHeightX = beamHeightMain;
+			beamWidthX = beamWidthMain;
+			beamHeightZ = beamHeightSecond;
+			beamWidthZ = beamWidthSecond;
+			beamHeightOffsetX = beamHeightOffset;
+			beamHeightOffsetZ = 0f;
+			matX = mainBeamMat;
+			matZ = secondBeamMat;
+		}
 
-
-
-//		------> X
+//		------> X - axis beams
 //		.  .  .
 //		------>
 //		.  .  .
 //		------>
 	
 		Vector3 newBuildPosX = new Vector3 (
-			                      transform.position.x,
-			transform.position.y + transform.localScale.y / 2 - beamHeight / 2,
-			                      transform.position.z - transform.localScale.z / 2);
+			                       transform.position.x,
+			                       transform.position.y + transform.localScale.y /2,
+			                       transform.position.z - transform.localScale.z / 2);
 		
 		GameObject newBeamX = Instantiate (beamPrefab, newBuildPosX, Quaternion.identity);
+		newBeamX.GetComponent<MeshRenderer> ().material = matX;
 
 		Vector3 newScaleX = new Vector3 (
-			transform.localScale.x + beamLengthOffset,
-			beamHeight,
-			beamWidth);
+			                    transform.localScale.x + beamLengthOffset,
+			                    beamHeightX,
+			                    beamWidthX);
 		
 		newBeamX.transform.localScale = newScaleX;
 
@@ -362,18 +403,19 @@ public class room : MonoBehaviour {
 //		|	.	|
 //		|	.	|
 //		v		v
-//		Z
+//		Z - axis beams
 
 		Vector3 newBuildPosZ = new Vector3 (
 			transform.position.x - transform.localScale.x /2,
-			transform.position.y + transform.localScale.y / 2 - beamHeight / 2,
+			transform.position.y + transform.localScale.y / 2,
 			transform.position.z);
 
 		GameObject newBeamZ = Instantiate (beamPrefab, newBuildPosZ, Quaternion.identity);
+		newBeamZ.GetComponent<MeshRenderer> ().material = matZ;
 
 		Vector3 newScaleZ = new Vector3 (
-			beamWidth,
-			beamHeight,
+			beamWidthZ,
+			beamHeightZ,
 			transform.localScale.z + beamLengthOffset);
 
 		newBeamZ.transform.localScale = newScaleZ;
