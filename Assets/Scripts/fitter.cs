@@ -12,11 +12,15 @@ public class fitter : MonoBehaviour {
 	[SerializeField] GameObject group; //container
 
 	//eventually parameters that user controls
-	int size_max=5; //for room size
-	int size_min=1; //for room size
+	int room_size_max=5; //for room size
+	int room_size_min=1; //for room size
+	int room_height_max=5; //for room size
+	int room_height_min=1; //for room size
 	int r=5;		//for building
 	int c=5;
 	int h=10;
+	int room_try_max = 150; //how many times it tries to fit a room
+	int density = 150;
 
 	[SerializeField] int height_max;
 	[SerializeField] int row_max;
@@ -56,11 +60,30 @@ public class fitter : MonoBehaviour {
 
 	public void create(){
 		delete ();
+		//height
 		h = Mathf.Max((int) (height_max * globalpara.Instance.getValue ("height")),1); //mathf.max so it'll never be 0
+
+		//bounds
 		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue ("bounds")),1); //mathf.max so it'll never be 0
 		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue ("bounds")),1); //mathf.max so it'll never be 0
-		size_max = Mathf.Min(r,c);
-		Debug.Log(h+", "+r+", "+c);
+
+		//fidelity
+		float fidelity = globalpara.Instance.getValue("fidelity");
+		room_size_max = Mathf.Max((int) (fidelity * Mathf.Min (r, c)),1);
+
+		//chaos
+		//variation in room size/dimensions
+		float chaos = globalpara.Instance.getValue("chaos");
+		room_height_max = room_height_min + (int) (chaos * height_max);
+		room_size_min = Mathf.Max(room_size_max - (int)(room_size_max * chaos),1);
+
+		//density
+		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue ("density")),1);
+
+		Debug.Log("height: "+h+"\nbounds, rows&cols: "+r+", "+c+"\n"+"fidelity, max room size: "+room_size_max+
+					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+
+					", min room size: "+room_size_min+
+					"\ndensity: "+density);
 		clear ();
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
@@ -90,9 +113,9 @@ public class fitter : MonoBehaviour {
 
 	bool place(int level){
 		bool placed = true;
-		int sizex = Random.Range (size_min, size_max+1);
-		int sizez = Random.Range (size_min, size_max+1);
-		int sizey = Random.Range (size_min, size_max);
+		int sizex = Random.Range (room_size_min, room_size_max+1);
+		int sizez = Random.Range (room_size_min, room_size_max+1);
+		int sizey = Random.Range (room_height_min, room_height_max);
 		int posx = Random.Range (0, r - sizex+1);
 		int posz = Random.Range (0, c - sizez+1);
 
@@ -132,7 +155,7 @@ public class fitter : MonoBehaviour {
 	}
 
 	void randomPlacement(int level){
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < density; i++) {
 			place (level);
 		}
 	}
