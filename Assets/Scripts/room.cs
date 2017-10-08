@@ -38,7 +38,7 @@ public class room : MonoBehaviour {
 	[SerializeField] GameObject beamPrefab;
 	[SerializeField] GameObject floorPrefab;
 	[SerializeField] GameObject columnPrefab;
-	[SerializeField] GameObject wall;
+	[SerializeField] GameObject wallPrefab;
 
 	//test beams
 	[SerializeField] Material mainBeamMat;
@@ -179,24 +179,79 @@ public class room : MonoBehaviour {
 	}
 
 	void BuildWalls() {
+
+		// adjustable parameters
+		float wallThickness = 0.1f;
+
 		
-//	-	.		
+//	-	. X		
 //	|		.
 //	+	.
 // 	Z
 
-//		.	-	
+		Vector3 newPos1 = new Vector3 (
+			transform.position.x - transform.localScale.x / 2,
+			transform.position.y,
+			transform.position.z);
+			
+		GameObject newWall1 = Instantiate (wallPrefab, newPos1,Quaternion.identity);
+
+		Vector3 newScale1 = new Vector3 (wallThickness, transform.localScale.y, transform.localScale.z);
+
+		newWall1.transform.localScale = newScale1;
+		newWall1.transform.parent = this.transform;
+
+
+//		.	- X	
 //	.		|
 //		.	+
-// 			Z
+// 	Z
+
+		Vector3 newPos2 = new Vector3 (
+			transform.position.x + transform.localScale.x / 2,
+			transform.position.y,
+			transform.position.z);
+
+		GameObject newWall2 = Instantiate (wallPrefab, newPos2,Quaternion.identity);
+
+		Vector3 newScale2 = new Vector3 (wallThickness, transform.localScale.y, transform.localScale.z);
+
+		newWall2.transform.localScale = newScale2;
+		newWall2.transform.parent = this.transform;
 
 //	-	_	+ X
 //	.		.
 //		.
+// Z
+	
+		Vector3 newPos3 = new Vector3 (
+			transform.position.x,
+			transform.position.y,
+			transform.position.z - transform.localScale.z / 2);
 
-//		.	 
+		GameObject newWall3 = Instantiate (wallPrefab, newPos3,Quaternion.identity);
+
+		Vector3 newScale3 = new Vector3 (transform.localScale.x, transform.localScale.y, wallThickness);
+
+		newWall3.transform.localScale = newScale3;
+		newWall3.transform.parent = this.transform;
+
+//		.	  X
 //	.		.
-//	-	_	+ X
+//	-	_	+ 
+//  Z
+
+		Vector3 newPos4 = new Vector3 (
+			transform.position.x,
+			transform.position.y,
+			transform.position.z + transform.localScale.z / 2);
+
+		GameObject newWall4 = Instantiate (wallPrefab, newPos4,Quaternion.identity);
+
+		Vector3 newScale4 = new Vector3 (transform.localScale.x, transform.localScale.y, wallThickness);
+
+		newWall4.transform.localScale = newScale4;
+		newWall4.transform.parent = this.transform;
 
 
 	}
