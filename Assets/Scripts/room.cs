@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SimpleJSON;
 
 public class room : MonoBehaviour {
 
 	/*
 	 * keeps track of stuff and generates stuff for each room.
-	 * 
-	 * room size
-	 * room location
 	 * 
 	 */
 
@@ -68,6 +66,41 @@ public class room : MonoBehaviour {
 
 		GenerateGreens ();
 		GeneratePeoples ();
+
+		BuildFloors ();
+		BuildWalls ();
+		BuildColumns ();
+		BuildBeams ();
+	}
+
+	public JSONObject export(){
+		JSONObject data = new JSONObject();
+		data ["dimensions x"].AsFloat = dimensions.x;
+		data ["dimensions y"].AsFloat = dimensions.y;
+		data ["dimensions z"].AsFloat = dimensions.z;
+		data ["level"].AsFloat = level;
+		data ["location x"].AsFloat = location.x;
+		data ["location y"].AsFloat = location.y;
+		data ["floor thickness"].AsFloat = floorThickness;
+		data ["floor offset size"].AsFloat = floorOffsetSize;
+		data ["num greens"].AsInt = greenToCreate;
+		data ["num ppl"].AsInt = peopleToCreate;
+		return data;
+	}
+
+	public void InitFromSave(Vector3 d, float l, Vector2 loc, float floorT, float floorS, int green, int people){
+		dimensions = d;
+		level = l;
+		location = loc;
+
+		floorThickness = floorT;
+		floorOffsetSize = floorS;
+
+		greenToCreate = green;
+		peopleToCreate = people;
+
+		//generate stuff
+		GenerateOutlines ();
 
 		BuildFloors ();
 		BuildWalls ();
@@ -142,6 +175,7 @@ public class room : MonoBehaviour {
 			float posx = Random.Range(-0.5f,0.5f);
 			float posz = Random.Range(-0.5f,0.5f);
 			newGreen.transform.localPosition = new Vector3(posx,posy,posz);
+			newGreen.GetComponent<green> ().Init ();
 		}
 	}
 
@@ -154,6 +188,7 @@ public class room : MonoBehaviour {
 			float posx = Random.Range(-0.5f,0.5f);
 			float posz = Random.Range(-0.5f,0.5f);
 			newPpl.transform.localPosition = new Vector3(posx,posy,posz);
+			newPpl.GetComponent<person> ().Init ();
 		}
 	}
 

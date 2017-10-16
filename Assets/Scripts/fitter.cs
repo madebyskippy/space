@@ -80,10 +80,10 @@ public class fitter : MonoBehaviour {
 		//density
 		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue ("density")),1);
 
-		Debug.Log("height: "+h+"\nbounds, rows&cols: "+r+", "+c+"\n"+"fidelity, max room size: "+room_size_max+
-					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+
-					", min room size: "+room_size_min+
-					"\ndensity: "+density);
+//		Debug.Log("height: "+h+"\nbounds, rows&cols: "+r+", "+c+"\n"+"fidelity, max room size: "+room_size_max+
+//					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+
+//					", min room size: "+room_size_min+
+//					"\ndensity: "+density);
 		clear ();
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
