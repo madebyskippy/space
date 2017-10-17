@@ -16,6 +16,7 @@ public class person : MonoBehaviour {
 
 	public void Init(int i){
 		id = i;
+		GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/people/person" + id);
 	}
 
 	// Use this for initialization
