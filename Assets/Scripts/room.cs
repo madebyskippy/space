@@ -18,7 +18,7 @@ public class room : MonoBehaviour {
 	float floorThickness;
 	float floorOffsetSize;
 
-	float columnThickness = 0.05f;
+	float columnThickness = 0.1f;
 	float columnDistance = 1f;
 
 	int greenToCreate;
@@ -42,12 +42,16 @@ public class room : MonoBehaviour {
 	[SerializeField] Material mainBeamMat;
 	[SerializeField] Material secondBeamMat;
 
+	GameObject mainBeam;
+	GameObject secondBeam;
+	GameObject floor;
+	GameObject column;
+	GameObject wall;
+
 
 
 	public void Init(Vector3 d, float l, Vector2 loc, float floorT, float floorS){ //temp structure parameters passed on to this function
-
-
-
+	
 		dimensions = d;
 		level = l;
 		location = loc;
@@ -61,16 +65,8 @@ public class room : MonoBehaviour {
 		greenToCreate = (int)(level * 5); //more trees higher up
 		peopleToCreate = (int)(5 - level * 5); //more people lower down
 
-		//generate stuff
-		GenerateOutlines ();
+		Generate ();
 
-		GenerateGreens ();
-		GeneratePeoples ();
-
-		BuildFloors ();
-		BuildWalls ();
-		BuildColumns ();
-		BuildBeams ();
 	}
 
 	public JSONObject export(){
@@ -99,11 +95,19 @@ public class room : MonoBehaviour {
 		greenToCreate = green;
 		peopleToCreate = people;
 
+		Generate ();
+	}
+
+	public void Generate() {
+
 		//generate stuff
-		GenerateOutlines ();
+//		GenerateOutlines ();
+
+		GenerateGreens ();
+		GeneratePeoples ();
 
 		BuildFloors ();
-		BuildWalls ();
+//		BuildWalls ();
 		BuildColumns ();
 		BuildBeams ();
 	}
@@ -440,6 +444,9 @@ public class room : MonoBehaviour {
 	}
 
 	void BuildBeams (){
+
+//		mainBeam = 
+
 		// adjustable parameters for beams
 		float beamWidthMain = 0.1f;
 		float beamHeightMain = 0.2f;
