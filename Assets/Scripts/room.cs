@@ -27,6 +27,7 @@ public class room : MonoBehaviour {
 	List<GameObject> columns = new List <GameObject> ();
 	List<GameObject> beams = new List <GameObject> ();
 
+	//prefabs to use - - - - - - - - - -
 	//outlines
 	[SerializeField] GameObject outlinePrefab;
 	//population stuff
@@ -37,18 +38,19 @@ public class room : MonoBehaviour {
 	[SerializeField] GameObject floorPrefab;
 	[SerializeField] GameObject columnPrefab;
 	[SerializeField] GameObject wallPrefab;
-
 	//test beams
 	[SerializeField] Material mainBeamMat;
 	[SerializeField] Material secondBeamMat;
 
+	//elements picked from prefabs to generate in the room - - - - - - - - - -
 	GameObject mainBeam;
 	GameObject secondBeam;
 	GameObject floor;
 	GameObject column;
 	GameObject wall;
 
-
+	//actual created elements to pass on to other scripts - - - - - - - - - -
+	GameObject myFloor;
 
 	public void Init(Vector3 d, float l, Vector2 loc, float floorT, float floorS){ //temp structure parameters passed on to this function
 	
@@ -214,7 +216,7 @@ public class room : MonoBehaviour {
 			transform.localScale.z + floorOffsetSize
 		);
 		newFloor.transform.parent = this.transform;
-
+		myFloor = newFloor;
 	}
 
 	void BuildWalls() {
@@ -572,6 +574,9 @@ public class room : MonoBehaviour {
 			newBeamZ.transform.parent = this.transform;
 		}
 	}
-
+		
+	public GameObject GetFloor() {
+		return myFloor;
+	}
 
 }
