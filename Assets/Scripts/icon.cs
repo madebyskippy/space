@@ -8,6 +8,7 @@ public class icon : MonoBehaviour {
 	[SerializeField] Text label;
 
 	string type;
+	string parameter;
 
 	float val;
 
@@ -15,9 +16,9 @@ public class icon : MonoBehaviour {
 		val = 1;
 	}
 
-	public void seticon(string ptype){
-		type = ptype;
-		label.text = type;
+	public void seticon(string ppara){
+		parameter = ppara;
+		label.text = parameter;
 	}
 	
 	// Update is called once per frame
@@ -27,7 +28,7 @@ public class icon : MonoBehaviour {
 
 	public void change (float v){
 		val = v;
-		globalpara.Instance.setValue (type, val);
+		globalpara.Instance.setValue (parameter, val);
 	}
 
 	public float getVal(){

@@ -24,6 +24,8 @@ public class globalpara : MonoBehaviour{
 	}
 	//========================================================================
 
+	[SerializeField] int numPara;
+	[SerializeField] int numStructPara;
 
 	private Dictionary<string, float> parameters = new Dictionary<string, float>(){
 		{"bounds",			1f },	//building bounds (length width)
@@ -32,6 +34,7 @@ public class globalpara : MonoBehaviour{
 		{"chaos",			1f },	//room symmetry/randomness
 		{"density", 		1f },	//room density 
 		{"cohesion",		1f } 	//coheisveness of types of structure
+		// from here should be struct para
 	};
 
 	public string getParameterName (int i) {
@@ -49,7 +52,10 @@ public class globalpara : MonoBehaviour{
 	}
 
 	public int getNumPara(){
-		return parameters.Count;
+		return numPara;
 	}
 
+	public int getNumStructPara(){
+		return numStructPara;
+	}
 }
