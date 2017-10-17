@@ -16,6 +16,7 @@ public class green : MonoBehaviour {
 
 	public void Init(int i){
 		id = i;
+		GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/treesPhoto/tree" + id);
 	}
 
 	// Use this for initialization

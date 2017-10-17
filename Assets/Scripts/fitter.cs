@@ -84,6 +84,7 @@ public class fitter : MonoBehaviour {
 //					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+
 //					", min room size: "+room_size_min+
 //					"\ndensity: "+density);
+		initialize();
 		clear ();
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
@@ -91,24 +92,15 @@ public class fitter : MonoBehaviour {
 	}
 
 	//deletes actual game objects
-	void delete(){
+	public void delete(){
 		for (int i = 0; i < rooms.Count; i++) {
 			Destroy (rooms [i].transform.parent.gameObject);
 		}
 	}
 
 	//clears lists and status lists
-	void clear(){
-		initialize();
+	public void clear(){
 		rooms.Clear ();
-//		for (int i = 0; i < r; i++) {
-//			for (int j = 0; j < c; j++) {
-//				for (int k = 0; k < h; k++) {
-//					numRooms [k] = 0;
-//					full [i, j, k] = false;
-//				}
-//			}
-//		}
 	}
 
 	bool place(int level){
