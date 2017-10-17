@@ -39,6 +39,8 @@ public class fitter : MonoBehaviour {
 
 	List<GameObject> rooms;
 
+	[SerializeField] connections connScript;
+
 	// Use this for initialization
 	void Start () {
 		initialize ();
@@ -89,6 +91,7 @@ public class fitter : MonoBehaviour {
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
 		}
+		connScript.InitializeConnections ();
 	}
 
 	//deletes actual game objects
