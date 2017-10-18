@@ -35,18 +35,18 @@ public class globalpara : MonoBehaviour{
 		{"density", 		1f },	//room density 
 		{"cohesion",		1f } 	//coheisveness of types of structure
 		// from here should be struct para
-//		,{"floorThickness",		1f},
-//		{"floorOffsetSize",		1f},
-//		{"columnThickness",		1f},
-//		{"columnDistance",		1f},
-//		{"beamWidthMain",		1f},
-//		{"beamHeightMain",		1f},
-//		{"beamWidthSecond",		1f},
-//		{"beamHeightSecond",	1f},
-//		{"beamLengthOffset",	1f},
-//		{"gridDistanceMain",	1f},
-//		{"gridDistanceSecond",	1f},
-//		{"beamHeightOffset",	1f}
+		,{"floorThickness",		1f}
+//		,{"floorOffsetSize",	1f}
+//		,{"columnThickness",	1f}
+//		,{"columnDistance",		1f}
+//		,{"beamWidthMain",		1f}
+//		,{"beamHeightMain",		1f}
+//		,{"beamWidthSecond",	1f}
+//		,{"beamHeightSecond",	1f}
+//		,{"beamLengthOffset",	1f}
+//		,{"gridDistanceMain",	1f}
+//		,{"gridDistanceSecond",	1f}
+//		,{"beamHeightOffset",	1f}
 
 	};
 

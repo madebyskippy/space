@@ -62,6 +62,7 @@ public class fitter : MonoBehaviour {
 
 	public void create(){
 		delete ();
+		//----------buildling para
 		//height
 		h = Mathf.Max((int) (height_max * globalpara.Instance.getValue ("height")),1); //mathf.max so it'll never be 0
 
@@ -81,6 +82,10 @@ public class fitter : MonoBehaviour {
 
 		//density
 		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue ("density")),1);
+
+		//---------struct para
+		//floor thickness
+		floorThickness = globalpara.Instance.getValue("floorThickness");
 
 //		Debug.Log("height: "+h+"\nbounds, rows&cols: "+r+", "+c+"\n"+"fidelity, max room size: "+room_size_max+
 //					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+

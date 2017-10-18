@@ -8,12 +8,13 @@ public class icon : MonoBehaviour {
 	[SerializeField] Text label;
 
 	string type;
-	string parameter;
+	[SerializeField] string parameter;
 
 	float val;
 
 	void Start () {
 		val = 1;
+		label.text = parameter;
 	}
 
 	public void seticon(string ppara){
