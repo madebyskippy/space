@@ -77,7 +77,7 @@ public class fitter : MonoBehaviour {
 		//chaos
 		//variation in room size/dimensions
 		float chaos = globalpara.Instance.getValue("chaos");
-		room_height_max = room_height_min + (int) (chaos * height_max);
+		room_height_max = room_height_min + (int) (chaos * h);
 		room_size_min = Mathf.Max(room_size_max - (int)(room_size_max * chaos),1);
 
 		//density
@@ -122,7 +122,8 @@ public class fitter : MonoBehaviour {
 		bool placed = true;
 		int sizex = Random.Range (room_size_min, room_size_max+1);
 		int sizez = Random.Range (room_size_min, room_size_max+1);
-		int sizey = Random.Range (room_height_min, room_height_max);
+		int sizey = Random.Range ((int)Mathf.Pow(room_height_min,2), (int)Mathf.Pow(room_height_max,2));
+		sizey = (int)Mathf.Floor(Mathf.Sqrt (sizey));
 		int posx = Random.Range (0, r - sizex+1);
 		int posz = Random.Range (0, c - sizez+1);
 

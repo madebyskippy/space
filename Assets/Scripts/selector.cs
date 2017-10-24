@@ -30,32 +30,14 @@ public class selector : MonoBehaviour {
 		numCircleParameters = globalpara.Instance.getNumPara ();
 		icons = new GameObject[numCircleParameters];
 		lines = new GameObject[numCircleParameters];
-
-		numStructureParameters = globalpara.Instance.getNumStructPara();
 			
 		fancycircle ();
-		columns ();
-	}
-
-	//for structure parameters
-	void columns(){
-		for (int i = 0; i < numStructureParameters; i++) {
-			GameObject s = Instantiate (slider,Vector3.zero, Quaternion.identity);
-			s.transform.SetParent(this.transform);
-
-			//TODO
-			//change this so it shows up in columns
-//			s.transform.localPosition = new Vector3 (radius + offsetx, radius + offsety, 0f);
-//			s.transform.localScale = new Vector3 (0.75f, 0.75f, 0.75f);
-
-			string p = globalpara.Instance.getParameterName (numCircleParameters + i);
-			s.GetComponent<icon> ().seticon (p);
-		}
 	}
 
 	//for overall parameters
 	void fancycircle(){
 		float angle = 2f * Mathf.PI / numCircleParameters;
+
 		for (int i = 0; i < numCircleParameters; i++) {
 
 			GameObject s = Instantiate (slider,Vector3.zero, Quaternion.identity);
@@ -67,43 +49,11 @@ public class selector : MonoBehaviour {
 			s.GetComponent<icon> ().seticon (p);
 			icons [i] = s;
 
-			if (i > 0) {
-				//draw the lineeee
-				GameObject l = Instantiate(line);
-				l.transform.SetParent(this.gameObject.transform);
-				l.GetComponent<LineRenderer> ().SetPosition (0, this.transform.TransformPoint(new Vector3(radius+offsetx+radius*Mathf.Cos(angle*(i-1)),radius+offsety+radius*Mathf.Sin(angle*(i-1)),0f)));
-				l.GetComponent<LineRenderer> ().SetPosition (1, this.transform.TransformPoint(new Vector3(radius+offsetx+radius*Mathf.Cos(angle*(i)),radius+offsety+radius*Mathf.Sin(angle*(i)),0f)));
-				lines[i-1]=l;
-			}
 		}
-		GameObject lend = Instantiate(line);
-		lend.transform.SetParent(this.gameObject.transform);
-		lend.GetComponent<LineRenderer> ().SetPosition (0, this.transform.TransformPoint(new Vector3(radius+offsetx+radius*Mathf.Cos(angle*(numCircleParameters-1)),radius+offsety+radius*Mathf.Sin(angle*(numCircleParameters-1)),0f)));
-		lend.GetComponent<LineRenderer> ().SetPosition (1, this.transform.TransformPoint(new Vector3(radius+offsetx+radius,radius+offsety,0f)));
-		lines [numCircleParameters - 1] = lend;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		drawlines ();
-	}
-
-	void drawlines(){
-		float angle = 2f * Mathf.PI / numCircleParameters;
-		for (int i = 1; i < numCircleParameters; i++) {
-			float x1 = radius + offsetx + radius * Mathf.Cos (angle * (i - 1)) * icons[i-1].GetComponent<icon> ().getVal ();
-			float y1 = radius + offsety + radius * Mathf.Sin (angle * (i - 1)) * icons [i - 1].GetComponent<icon> ().getVal ();
-			float x2 = radius + offsetx + radius * Mathf.Cos (angle * (i)) * icons [i].GetComponent<icon> ().getVal ();
-			float y2 = radius + offsety + radius * Mathf.Sin (angle * (i)) * icons [i].GetComponent<icon> ().getVal ();
-			lines[i-1].GetComponent<LineRenderer> ().SetPosition (0, this.transform.TransformPoint(new Vector3(x1,y1,0f)));
-			lines[i-1].GetComponent<LineRenderer> ().SetPosition (1, this.transform.TransformPoint(new Vector3(x2,y2,0f)));
-		}
-		float x = radius + offsetx + radius * Mathf.Cos (angle * (numCircleParameters - 1)) * icons [numCircleParameters - 1].GetComponent<icon> ().getVal ();
-		float y = radius + offsety + radius * Mathf.Sin (angle * (numCircleParameters - 1)) * icons [numCircleParameters - 1].GetComponent<icon> ().getVal ();
-		lines[numCircleParameters-1].GetComponent<LineRenderer> ().SetPosition (0, this.transform.TransformPoint(new Vector3(x,y,0f)));
-		x = radius + offsetx + radius * icons [0].GetComponent<icon> ().getVal ();
-		y = radius + offsety;
-		lines[numCircleParameters-1].GetComponent<LineRenderer> ().SetPosition (1, this.transform.TransformPoint(new Vector3(x,y,0f)));
 	}
 
 	public float getValue(int i){
