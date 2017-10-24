@@ -99,6 +99,13 @@ public class fitter : MonoBehaviour {
 		connScript.InitializeConnections ();
 	}
 
+	//used when loading a building
+	//nothing else in this script runs but it still needs a reference to all the rooms
+	//(so it can delete them later when you want)
+	public void setRoomList(List<GameObject> r){
+		rooms = r;
+	}
+
 	//deletes actual game objects
 	public void delete(){
 		for (int i = 0; i < rooms.Count; i++) {

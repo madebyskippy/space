@@ -87,6 +87,8 @@ public class manager : MonoBehaviour {
 		roomfitter.delete ();
 		roomfitter.clear ();
 
+		List<GameObject> rms = new List<GameObject>();
+
 		//ok load the bldg
 		for (int i = 0; i < json ["num rooms"]; i++) {
 			//container + room
@@ -105,6 +107,7 @@ public class manager : MonoBehaviour {
 			int numG = json ["container" + i] ["room"] ["num greens"];
 			int numP = json ["container" + i] ["room"] ["num ppl"];
 			t.GetComponent<room> ().InitFromSave (d,l,loc,floorT,floorS,numG,numP);
+			rms.Add (t);
 
 			//greens
 			for (int j=0; j<json ["container" + i] ["room"] ["num greens"]; j++){
@@ -131,6 +134,8 @@ public class manager : MonoBehaviour {
 			}
 
 		}
+
+		roomfitter.setRoomList (rms);
 	}
 
 

@@ -68,6 +68,7 @@ public class room : MonoBehaviour {
 		peopleToCreate = (int)(5 - level * 5); //more people lower down
 
 		Generate ();
+		Fill ();
 
 	}
 
@@ -105,13 +106,16 @@ public class room : MonoBehaviour {
 		//generate stuff
 //		GenerateOutlines ();
 
-		GenerateGreens ();
-		GeneratePeoples ();
-
 		BuildFloors ();
 //		BuildWalls ();
 		BuildColumns ();
 		BuildBeams ();
+	}
+
+	public void Fill(){
+		GenerateGreens ();
+		GeneratePeoples ();
+		GenerateFurniture ();
 	}
 	
 	void GenerateOutlines () {
