@@ -123,7 +123,7 @@ public class fitter : MonoBehaviour {
 		int sizex = Random.Range (room_size_min, room_size_max+1);
 		int sizez = Random.Range (room_size_min, room_size_max+1);
 		int sizey = Random.Range ((int)Mathf.Pow(room_height_min,2), (int)Mathf.Pow(room_height_max,2));
-		sizey = (int)Mathf.Floor(Mathf.Sqrt (sizey));
+		sizey = room_height_max-(int)Mathf.Floor(Mathf.Sqrt (sizey));
 		int posx = Random.Range (0, r - sizex+1);
 		int posz = Random.Range (0, c - sizez+1);
 
