@@ -1,15 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class selector : MonoBehaviour {
-
-	/*
-	 * TODO 
-	 * make the sliders affect stuff
-	 * draw the lines
-	 * 
-	 */
 
 	int numCircleParameters;
 	int numStructureParameters;
@@ -17,7 +11,6 @@ public class selector : MonoBehaviour {
 	[SerializeField] GameObject slider;
 	[SerializeField] GameObject line;
 
-	GameObject[] lines;
 	GameObject[] icons;
 
 	//for display
@@ -29,7 +22,6 @@ public class selector : MonoBehaviour {
 	void Start () {
 		numCircleParameters = globalpara.Instance.getNumPara ();
 		icons = new GameObject[numCircleParameters];
-		lines = new GameObject[numCircleParameters];
 			
 		fancycircle ();
 	}
@@ -58,5 +50,9 @@ public class selector : MonoBehaviour {
 
 	public float getValue(int i){
 		return icons [i].GetComponent<icon> ().getVal ();
+	}
+
+	public void setValue(int i, float v){
+		icons [i].GetComponent<Slider> ().value = v;
 	}
 }

@@ -8,6 +8,7 @@ public class manager : MonoBehaviour {
 
 	[SerializeField] fitter roomfitter;
 	[SerializeField] GameObject building; 
+	[SerializeField] selector sliders;
 
 	[Header ("for loading")]
 	[SerializeField] GameObject cube;
@@ -76,13 +77,19 @@ public class manager : MonoBehaviour {
 		}
 		data ["num rooms"].AsInt = building.transform.childCount;
 
+		//for sliders
+		for (int j = 0; j < globalpara.Instance.getNumPara (); j++) {
+			string name = globalpara.Instance.getParameterName (j);
+			data [name].AsFloat = globalpara.Instance.getValue(name);
+		}
+
 		string timestamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
 		WriteJSONtoFile ("Assets/Resources/Buildings", timestamp+".txt", data);
 	}
 
 	void load(){
 		//other json shit
-		JSONNode json = ReadJSONFromFile("Assets/Resources/Buildings", "20171016193035.txt");
+		JSONNode json = ReadJSONFromFile("Assets/Resources/Buildings", "20171025180124.txt");
 
 		roomfitter.delete ();
 		roomfitter.clear ();
@@ -133,6 +140,13 @@ public class manager : MonoBehaviour {
 				newPpl.GetComponent<person> ().Init (json ["container" + i] ["people"] [""+j] ["id"]);
 			}
 
+		}
+
+		//for sliders
+		for (int j = 0; j < globalpara.Instance.getNumPara (); j++) {
+			string name = globalpara.Instance.getParameterName (j);
+			globalpara.Instance.setValue (name, json [name]);
+			sliders.setValue(j,globalpara.Instance.getValue(name));
 		}
 
 		roomfitter.setRoomList (rms);

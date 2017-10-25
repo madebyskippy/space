@@ -5,13 +5,13 @@ using UnityEngine;
 public class fitter : MonoBehaviour {
 
 	/*
-	 * problems: how to control space density?
+	 * 
 	 */
 
 	[SerializeField] GameObject cube;
 	[SerializeField] GameObject group; //container
 
-	//eventually parameters that user controls
+	// parameters that user controls
 	int room_size_max=5; //for room size
 	int room_size_min=1; //for room size
 	int room_height_max=5; //for room size
@@ -28,8 +28,9 @@ public class fitter : MonoBehaviour {
 
 	//temp controls for adjusting some parameters
 
-	[Range(0.1f, 0.5f)]
-	[SerializeField] float floorThickness = 0.3f;
+//	[Range(0.1f, 0.5f)]
+//	[SerializeField] float floorThickness = 0.3f;
+	float floorThickness = 0.3f; //controlled by slider now
 	[Range(-1f, 1f)]
 	[SerializeField] float floorOffsetSize = 0f;
 
@@ -122,8 +123,8 @@ public class fitter : MonoBehaviour {
 		bool placed = true;
 		int sizex = Random.Range (room_size_min, room_size_max+1);
 		int sizez = Random.Range (room_size_min, room_size_max+1);
-		int sizey = Random.Range ((int)Mathf.Pow(room_height_min,2), (int)Mathf.Pow(room_height_max,2));
-		sizey = room_height_max-(int)Mathf.Floor(Mathf.Sqrt (sizey));
+		float sizey_distrib = Random.Range (Mathf.Pow(room_height_min,2f), Mathf.Pow(room_height_max,2f));
+		int sizey = room_height_max-(int)Mathf.Floor(Mathf.Sqrt (sizey_distrib));
 		int posx = Random.Range (0, r - sizex+1);
 		int posz = Random.Range (0, c - sizez+1);
 
