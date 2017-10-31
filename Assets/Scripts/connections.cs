@@ -25,7 +25,10 @@ public class connections : MonoBehaviour {
 	}
 
 	void UpdateNavMesh() {
+        navSrf.RemoveData();
         navSrf.BuildNavMesh();
+
+
 	}
 
 }

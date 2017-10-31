@@ -97,8 +97,11 @@ public class fitter : MonoBehaviour {
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
 		}
-		connScript.InitializeConnections ();
 
+        // NO DELAY
+        //connScript.InitializeConnections();
+        // DELAY
+        Invoke("InitConnections", 0.1f);
 
 	}
 
@@ -174,4 +177,9 @@ public class fitter : MonoBehaviour {
 	public List<GameObject> getRooms(){
 		return rooms;
 	}
+
+    // test for later creation of connections
+    void InitConnections (){
+        connScript.InitializeConnections();
+    }
 }

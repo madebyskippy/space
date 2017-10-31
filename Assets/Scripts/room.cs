@@ -68,7 +68,12 @@ public class room : MonoBehaviour {
 		peopleToCreate = (int)(5 - level * 5); //more people lower down
 
 		Generate ();
-		Fill ();
+
+        // NO DELAY
+        //Fill();
+        // DELAY
+        Invoke("Fill", 0.2f);
+		
 
 	}
 
