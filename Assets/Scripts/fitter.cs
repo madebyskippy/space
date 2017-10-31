@@ -98,6 +98,8 @@ public class fitter : MonoBehaviour {
 			randomPlacement (i);
 		}
 		connScript.InitializeConnections ();
+
+
 	}
 
 	//used when loading a building
