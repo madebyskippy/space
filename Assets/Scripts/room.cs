@@ -70,9 +70,9 @@ public class room : MonoBehaviour {
 		Generate ();
 
         // NO DELAY
-        //Fill();
+        Fill();
         // DELAY
-        Invoke("Fill", 0.2f);
+        //Invoke("Fill", 0.2f);
 		
 
 	}
@@ -109,7 +109,7 @@ public class room : MonoBehaviour {
 	public void Generate() {
 
 		//generate stuff
-//		GenerateOutlines ();
+		//GenerateOutlines ();
 
 		BuildFloors ();
 //		BuildWalls ();
@@ -133,7 +133,7 @@ public class room : MonoBehaviour {
 
 		//generate floor outlines
 		GameObject floorOutlineGO = Instantiate (outlinePrefab,gameObject.transform.position, Quaternion.identity);
-		floorOutlineGO.transform.parent = this.transform;
+		floorOutlineGO.transform.parent = this.transform.parent;
 		LineRenderer floorLine = floorOutlineGO.GetComponent<LineRenderer> ();
 		floorLine.positionCount = 5;
 		floorLine.SetPosition (0, cornerPoints [1]);
@@ -144,7 +144,7 @@ public class room : MonoBehaviour {
 
 		// generate ceiling outlines
 		GameObject ceilingOutlineGO = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
-		ceilingOutlineGO.transform.parent = this.transform;
+        ceilingOutlineGO.transform.parent = this.transform.parent;
 		LineRenderer ceilingLine = ceilingOutlineGO.GetComponent<LineRenderer> ();
 		ceilingLine.positionCount = 5;
 		ceilingLine.SetPosition (0, cornerPoints [3]);
@@ -155,25 +155,25 @@ public class room : MonoBehaviour {
 
 		// generate walls outlines
 		GameObject wallOutline1 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
-		wallOutline1.transform.parent = this.transform;
+        wallOutline1.transform.parent = this.transform.parent;
 		LineRenderer wallLine1 = wallOutline1.GetComponent<LineRenderer> ();
 		wallLine1.positionCount = 2;
 		wallLine1.SetPosition (0, cornerPoints [7]);
 		wallLine1.SetPosition (1, cornerPoints [5]);
 		GameObject wallOutline2 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
-		wallOutline2.transform.parent = this.transform;
+        wallOutline2.transform.parent = this.transform.parent;
 		LineRenderer wallLine2 = wallOutline2.GetComponent<LineRenderer> ();
 		wallLine2.positionCount = 2;
 		wallLine2.SetPosition (0, cornerPoints [6]);
 		wallLine2.SetPosition (1, cornerPoints [4]);
 		GameObject wallOutline3 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
-		wallOutline3.transform.parent = this.transform;
+        wallOutline3.transform.parent = this.transform.parent;
 		LineRenderer wallLine3 = wallOutline3.GetComponent<LineRenderer> ();
 		wallLine3.positionCount = 2;
 		wallLine3.SetPosition (0, cornerPoints [0]);
 		wallLine3.SetPosition (1, cornerPoints [2]);
 		GameObject wallOutline4 = Instantiate (outlinePrefab, gameObject.transform.position, Quaternion.identity);
-		wallOutline4.transform.parent = this.transform;
+        wallOutline4.transform.parent = this.transform.parent;
 		LineRenderer wallLine4 = wallOutline4.GetComponent<LineRenderer> ();
 		wallLine4.positionCount = 2;
 		wallLine4.SetPosition (0, cornerPoints [1]);
@@ -185,7 +185,7 @@ public class room : MonoBehaviour {
 		for (int i = 0; i < greenToCreate; i++) {
 			GameObject newGreen = Instantiate (greenPrefab);
 			newGreen.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
-			newGreen.transform.parent = this.transform;
+            newGreen.transform.parent = this.transform.parent;
 			float posy = -0.5f;
 			float posx = Random.Range(-0.5f,0.5f);
 			float posz = Random.Range(-0.5f,0.5f);
@@ -197,8 +197,8 @@ public class room : MonoBehaviour {
 	void GeneratePeoples(){
 		for (int i = 0; i < peopleToCreate; i++) {
 			GameObject newPpl = Instantiate (peoplePrefab);
-			newPpl.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
-			newPpl.transform.parent = this.transform;
+			//newPpl.transform.localScale = Vector3.one * 0.5f; //TEMPORARY // TEMPORARY remomved
+            newPpl.transform.parent = this.transform.parent;
 			float posy = -0.5f;
 			float posx = Random.Range(-0.5f,0.5f);
 			float posz = Random.Range(-0.5f,0.5f);
@@ -224,7 +224,7 @@ public class room : MonoBehaviour {
 			floorThickness,
 			transform.localScale.z + floorOffsetSize
 		);
-		newFloor.transform.parent = this.transform;
+        newFloor.transform.parent = this.transform.parent;
 		myFloor = newFloor;
 	}
 
@@ -249,7 +249,7 @@ public class room : MonoBehaviour {
 		Vector3 newScale1 = new Vector3 (wallThickness, transform.localScale.y, transform.localScale.z);
 
 		newWall1.transform.localScale = newScale1;
-		newWall1.transform.parent = this.transform;
+        newWall1.transform.parent = this.transform.parent;
 
 
 //		.	- X	
@@ -267,7 +267,7 @@ public class room : MonoBehaviour {
 		Vector3 newScale2 = new Vector3 (wallThickness, transform.localScale.y, transform.localScale.z);
 
 		newWall2.transform.localScale = newScale2;
-		newWall2.transform.parent = this.transform;
+        newWall2.transform.parent = this.transform.parent;
 
 //	-	_	+ X
 //	.		.
@@ -284,7 +284,7 @@ public class room : MonoBehaviour {
 		Vector3 newScale3 = new Vector3 (transform.localScale.x, transform.localScale.y, wallThickness);
 
 		newWall3.transform.localScale = newScale3;
-		newWall3.transform.parent = this.transform;
+        newWall3.transform.parent = this.transform.parent;
 
 //		.	  X
 //	.		.
@@ -301,7 +301,7 @@ public class room : MonoBehaviour {
 		Vector3 newScale4 = new Vector3 (transform.localScale.x, transform.localScale.y, wallThickness);
 
 		newWall4.transform.localScale = newScale4;
-		newWall4.transform.parent = this.transform;
+        newWall4.transform.parent = this.transform.parent;
 
 
 	}
@@ -450,7 +450,7 @@ public class room : MonoBehaviour {
 
 		for (int i = 0; i < columns.Count; i++) {
 			columns [i].transform.localScale = t_Scale;
-			columns [i].transform.parent = this.transform;
+            columns [i].transform.parent = this.transform.parent;
 		}
 	}
 
@@ -552,7 +552,7 @@ public class room : MonoBehaviour {
 		
 			newBeamX.transform.localScale = newScaleX;
 
-			newBeamX.transform.parent = this.transform;
+            newBeamX.transform.parent = this.transform.parent;
 		}
 
 //		|	.	|
@@ -580,7 +580,7 @@ public class room : MonoBehaviour {
 
 			newBeamZ.transform.localScale = newScaleZ;
 
-			newBeamZ.transform.parent = this.transform;
+            newBeamZ.transform.parent = this.transform.parent;
 		}
 	}
 		

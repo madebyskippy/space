@@ -21,12 +21,15 @@ public class connections : MonoBehaviour {
 			floors.Add(rooms[i].GetComponent<room>().GetFloor());
 		}
 
-        UpdateNavMesh();
+        RebuildNavMesh();
 	}
 
-	void UpdateNavMesh() {
-        navSrf.RemoveData();
+	void RebuildNavMesh() {
+        navSrf.enabled = false;
+        navSrf.enabled = true;
+        //navSrf.RemoveData();
         navSrf.BuildNavMesh();
+
 
 
 	}

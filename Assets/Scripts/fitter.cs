@@ -15,7 +15,7 @@ public class fitter : MonoBehaviour {
 	int room_size_max=5; //for room size
 	int room_size_min=1; //for room size
 	int room_height_max=5; //for room size
-	int room_height_min=1; //for room size
+	int room_height_min=2; //for room size
 	int r=5;		//for building
 	int c=5;
 	int h=10;
@@ -99,9 +99,9 @@ public class fitter : MonoBehaviour {
 		}
 
         // NO DELAY
-        //connScript.InitializeConnections();
+        connScript.InitializeConnections();
         // DELAY
-        Invoke("InitConnections", 0.1f);
+        //Invoke("InitConnections", 0.1f);
 
 	}
 
@@ -115,6 +115,7 @@ public class fitter : MonoBehaviour {
 	//deletes actual game objects
 	public void delete(){
 		for (int i = 0; i < rooms.Count; i++) {
+            rooms[i].transform.parent.gameObject.SetActive(false); //first set to inactive because destroying happens too late
 			Destroy (rooms [i].transform.parent.gameObject);
 		}
 	}
@@ -129,7 +130,7 @@ public class fitter : MonoBehaviour {
 		int sizex = Random.Range (room_size_min, room_size_max+1);
 		int sizez = Random.Range (room_size_min, room_size_max+1);
 		float sizey_distrib = Random.Range (Mathf.Pow(room_height_min,2f), Mathf.Pow(room_height_max,2f));
-		int sizey = room_height_max-(int)Mathf.Floor(Mathf.Sqrt (sizey_distrib));
+		int sizey = room_height_min+room_height_max-(int)Mathf.Floor(Mathf.Sqrt (sizey_distrib));
 		int posx = Random.Range (0, r - sizex+1);
 		int posz = Random.Range (0, c - sizez+1);
 
@@ -146,6 +147,7 @@ public class fitter : MonoBehaviour {
 			
 		GameObject t = Instantiate (cube, new Vector3 (0,0,0), Quaternion.identity);
 		GameObject p = new GameObject ();
+        p.name = "Room";
 		p.transform.position = new Vector3 ((-1*r*0.5f)+posx, level, (-1*c*0.5f)+posz);
 		t.transform.parent = p.transform;
 		t.transform.localPosition = new Vector3 (sizex*0.5f,sizey*0.5f,sizez*0.5f);
