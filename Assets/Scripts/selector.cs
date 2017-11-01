@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class selector : MonoBehaviour {
 
 	int numCircleParameters;
-	int numStructureParameters;
+	int numActiveParameters;
 
 	[SerializeField] GameObject slider;
 	[SerializeField] GameObject line;
@@ -21,6 +21,7 @@ public class selector : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		numCircleParameters = globalpara.Instance.getNumPara ();
+		numActiveParameters = globalpara.Instance.getNumActivePara ();
 		icons = new GameObject[numCircleParameters];
 			
 		fancycircle ();
@@ -28,9 +29,9 @@ public class selector : MonoBehaviour {
 
 	//for overall parameters
 	void fancycircle(){
-		float angle = 2f * Mathf.PI / numCircleParameters;
+		float angle = 2f * Mathf.PI / numActiveParameters;
 
-		for (int i = 0; i < numCircleParameters; i++) {
+		for (int i = 0; i < numActiveParameters; i++) {
 
 			GameObject s = Instantiate (slider,Vector3.zero, Quaternion.identity);
 			s.transform.SetParent(this.transform);
@@ -39,11 +40,24 @@ public class selector : MonoBehaviour {
 			s.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, angle * i * Mathf.Rad2Deg));
 			s.GetComponent<icon> ().seticon ((parameters)i);
 			icons [i] = s;
+			setValue (i, globalpara.Instance.getValue ((parameters)(i)));
+		}
+	}
+
+	void clear(){
+		for (int i = 0; i < transform.childCount; i++) {
+			Destroy (transform.GetChild (i).gameObject);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+//		temporary to see if you can change the circle willy nilly
+//		if (Input.GetKeyDown (KeyCode.N)) {
+//			numActiveParameters = 5;
+//			clear ();
+//			fancycircle ();
+//		}
 	}
 
 	public float getValue(int i){

@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum parameters {bounds, height, fidelity, chaos, density, cohesion, floorThickness};
+public enum parameters {
+	bounds, height, fidelity, chaos, density, cohesion, 
+	floorThickness
+};
 
-public enum achievements {peoplemeet};
+public enum events {
+	peoplemeet
+};
 
 public class globalpara : MonoBehaviour{
 
@@ -32,52 +37,36 @@ public class globalpara : MonoBehaviour{
 	[SerializeField] int numPara;
 	int numActivePara;
 
-	private Dictionary<string, float> parameters = new Dictionary<string, float>(){
-		{"bounds",			1f },	//building bounds (length width)
-		{"height",			1f },	//building height
-		{"fidelity", 		1f },	//room fidelity
-		{"chaos",			1f },	//room symmetry/randomness
-		{"density", 		1f },	//room density 
-		{"cohesion",		1f } 	//coheisveness of types of structure
+	private float[] parameterValue;
 
-		,{"floorThickness",		0.1f}
-//		,{"floorOffsetSize",	1f}
-//		,{"columnThickness",	1f}
-//		,{"columnDistance",		1f}
-//		,{"beamWidthMain",		1f}
-//		,{"beamHeightMain",		1f}
-//		,{"beamWidthSecond",	1f}
-//		,{"beamHeightSecond",	1f}
-//		,{"beamLengthOffset",	1f}
-//		,{"gridDistanceMain",	1f}
-//		,{"gridDistanceSecond",	1f}
-//		,{"beamHeightOffset",	1f}
-
-	};
-
-	private float[] parameterState;
-
-	private bool[] achievementState;
+	private bool[] eventState;
 
 	void Start(){
 		int length = System.Enum.GetNames(typeof(parameters)).Length;
-		parameterState = new float[length];
+		parameterValue = new float[length];
 		for (int i=0; i<length; i++){
-			parameterState [i] = 1f;
+			parameterValue [i] = 1f;
 		}
-		length = System.Enum.GetNames(typeof(achievements)).Length;
-		achievementState = new bool[length];
+		length = System.Enum.GetNames(typeof(events)).Length;
+		eventState = new bool[length];
 		for (int i=0; i<length; i++){
-			achievementState [i] = false;
+			eventState [i] = false;
 		}
+
+		//start with 3 parameters.
+		numActivePara = 3;
 	}
 
+	//-----
+	//for parameter value stuff
+	//-----
+
 	public void setValue (parameters para, float val){
-		parameterState [(int)para] = val;
+		parameterValue [(int)para] = val;
 	}
 
 	public float getValue (parameters para){
-		return parameterState[(int)para];
+		return parameterValue[(int)para];
 	}
 
 	public int getNumPara(){
@@ -86,6 +75,20 @@ public class globalpara : MonoBehaviour{
 
 	public int getNumActivePara(){
 		return numActivePara;
+	}
+
+	//-----
+	//for event state stuff
+	//-----
+
+	public void setState(events e, bool s){
+		eventState [(int)e] = s;
+		//you can do stuff here to set the numactivepara to be higher
+		//(thus giving u more sliders)
+		//(depending on what events have been happened)
+	}
+	public bool getState(events e){
+		return eventState [(int)e];
 	}
 
 }
