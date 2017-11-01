@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum parameters {bounds, height, fidelity, chaos, density, cohesion, floorThickness};
+
+public enum achievements {peoplemeet};
+
 public class globalpara : MonoBehaviour{
 
 	private static globalpara instance = null;
 
 	//========================================================================
+
 	//code help from hang ruan :-)
 	public static globalpara Instance {
 		get { 
@@ -25,7 +30,7 @@ public class globalpara : MonoBehaviour{
 	//========================================================================
 
 	[SerializeField] int numPara;
-	[SerializeField] int numStructPara;
+	int numActivePara;
 
 	private Dictionary<string, float> parameters = new Dictionary<string, float>(){
 		{"bounds",			1f },	//building bounds (length width)
@@ -34,8 +39,8 @@ public class globalpara : MonoBehaviour{
 		{"chaos",			1f },	//room symmetry/randomness
 		{"density", 		1f },	//room density 
 		{"cohesion",		1f } 	//coheisveness of types of structure
-		// from here should be struct para
-		,{"floorThickness",		1f}
+
+		,{"floorThickness",		0.1f}
 //		,{"floorOffsetSize",	1f}
 //		,{"columnThickness",	1f}
 //		,{"columnDistance",		1f}
@@ -50,25 +55,37 @@ public class globalpara : MonoBehaviour{
 
 	};
 
-	public string getParameterName (int i) {
-		string[] pkeys = new string[parameters.Count];
-		parameters.Keys.CopyTo (pkeys, 0);
-		return pkeys [i];
+	private float[] parameterState;
+
+	private bool[] achievementState;
+
+	void Start(){
+		int length = System.Enum.GetNames(typeof(parameters)).Length;
+		parameterState = new float[length];
+		for (int i=0; i<length; i++){
+			parameterState [i] = 1f;
+		}
+		length = System.Enum.GetNames(typeof(achievements)).Length;
+		achievementState = new bool[length];
+		for (int i=0; i<length; i++){
+			achievementState [i] = false;
+		}
 	}
 
-	public void setValue (string para, float val){
-		parameters [para] = val;
+	public void setValue (parameters para, float val){
+		parameterState [(int)para] = val;
 	}
 
-	public float getValue (string para){
-		return parameters[para];
+	public float getValue (parameters para){
+		return parameterState[(int)para];
 	}
 
 	public int getNumPara(){
 		return numPara;
 	}
 
-	public int getNumStructPara(){
-		return numStructPara;
+	public int getNumActivePara(){
+		return numActivePara;
 	}
+
 }

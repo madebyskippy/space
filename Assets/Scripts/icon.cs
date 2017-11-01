@@ -7,19 +7,18 @@ public class icon : MonoBehaviour {
 
 	[SerializeField] Text label;
 
-	string type;
-	[SerializeField] string parameter;
+	[SerializeField] parameters parameter;
 
 	float val;
 
 	void Start () {
 		val = 1;
-		label.text = parameter;
+		label.text = parameter.ToString();
 	}
 
-	public void seticon(string ppara){
+	public void seticon(parameters ppara){
 		parameter = ppara;
-		label.text = parameter;
+		label.text = parameter.ToString();
 	}
 	
 	// Update is called once per frame

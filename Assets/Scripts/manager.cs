@@ -79,8 +79,7 @@ public class manager : MonoBehaviour {
 
 		//for sliders
 		for (int j = 0; j < globalpara.Instance.getNumPara (); j++) {
-			string name = globalpara.Instance.getParameterName (j);
-			data [name].AsFloat = globalpara.Instance.getValue(name);
+			data ["slider"+j.ToString()].AsFloat = globalpara.Instance.getValue((parameters)(j));
 		}
 
 		string timestamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -89,7 +88,7 @@ public class manager : MonoBehaviour {
 
 	void load(){
 		//other json shit
-		JSONNode json = ReadJSONFromFile("Assets/Resources/Buildings", "20171025180124.txt");
+		JSONNode json = ReadJSONFromFile("Assets/Resources/Buildings", "20171101172730.txt");
 
 		roomfitter.delete ();
 		roomfitter.clear ();
@@ -144,9 +143,9 @@ public class manager : MonoBehaviour {
 
 		//for sliders
 		for (int j = 0; j < globalpara.Instance.getNumPara (); j++) {
-			string name = globalpara.Instance.getParameterName (j);
-			globalpara.Instance.setValue (name, json [name]);
-			sliders.setValue(j,globalpara.Instance.getValue(name));
+			float val = json ["slider" + j.ToString ()];
+			globalpara.Instance.setValue ((parameters)(j), val);
+			sliders.setValue(j,val);
 		}
 
 		roomfitter.setRoomList (rms);

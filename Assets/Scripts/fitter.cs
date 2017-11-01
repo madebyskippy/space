@@ -65,28 +65,28 @@ public class fitter : MonoBehaviour {
 		delete ();
 		//----------buildling para
 		//height
-		h = Mathf.Max((int) (height_max * globalpara.Instance.getValue ("height")),1); //mathf.max so it'll never be 0
+		h = Mathf.Max((int) (height_max * globalpara.Instance.getValue (parameters.height)),1); //mathf.max so it'll never be 0
 
 		//bounds
-		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue ("bounds")),1); //mathf.max so it'll never be 0
-		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue ("bounds")),1); //mathf.max so it'll never be 0
+		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue (parameters.bounds)),1); //mathf.max so it'll never be 0
+		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue (parameters.bounds)),1); //mathf.max so it'll never be 0
 
 		//fidelity
-		float fidelity = globalpara.Instance.getValue("fidelity");
+		float fidelity = globalpara.Instance.getValue(parameters.fidelity);
 		room_size_max = Mathf.Max((int) (fidelity * Mathf.Min (r, c)),1);
 
 		//chaos
 		//variation in room size/dimensions
-		float chaos = globalpara.Instance.getValue("chaos");
+		float chaos = globalpara.Instance.getValue(parameters.chaos);
 		room_height_max = room_height_min + (int) (chaos * h);
 		room_size_min = Mathf.Max(room_size_max - (int)(room_size_max * chaos),1);
 
 		//density
-		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue ("density")),1);
+		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue (parameters.density)),1);
 
 		//---------struct para
 		//floor thickness
-		floorThickness = globalpara.Instance.getValue("floorThickness");
+		floorThickness = globalpara.Instance.getValue(parameters.floorThickness);
 
 //		Debug.Log("height: "+h+"\nbounds, rows&cols: "+r+", "+c+"\n"+"fidelity, max room size: "+room_size_max+
 //					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+

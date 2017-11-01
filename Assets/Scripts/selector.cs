@@ -37,10 +37,8 @@ public class selector : MonoBehaviour {
 			s.transform.localPosition = new Vector3 (radius + offsetx, radius + offsety, 0f);
 			s.transform.localScale = new Vector3 (0.75f, 0.75f, 0.75f);
 			s.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, angle * i * Mathf.Rad2Deg));
-			string p = globalpara.Instance.getParameterName (i);
-			s.GetComponent<icon> ().seticon (p);
+			s.GetComponent<icon> ().seticon ((parameters)i);
 			icons [i] = s;
-
 		}
 	}
 	
