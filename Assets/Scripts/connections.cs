@@ -47,7 +47,7 @@ public class connections : MonoBehaviour {
                     }
             }
             //Debug.Log(closestFloor.transform.position + " is closest to : " + floors[i].transform.position + " with a distance of : " + distance);
-            //Debug.DrawLine(floors[i].transform.position, closestFloor.transform.position, Color.red, 20f);
+            Debug.DrawLine(floors[i].transform.position, closestFloor.transform.position, Color.red, 20f);
         }
     }
 
