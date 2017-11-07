@@ -17,10 +17,11 @@ public class connections : MonoBehaviour {
 
     public void InitializeConnections() {
 		rooms = fitScript.getRooms ();
+        floors.Clear();
 		for (int i = 0; i < rooms.Count; i++) {
 			floors.Add(rooms[i].GetComponent<room>().GetFloor());
 		}
-
+      
         RebuildNavMesh();
         CreateConnections();
 	}
@@ -30,27 +31,28 @@ public class connections : MonoBehaviour {
         navSrf.enabled = true;
         //navSrf.RemoveData();
         navSrf.BuildNavMesh();
-
 	}
 
 
     void CreateConnections() {
-        
        for (int i = 0; i < floors.Count; i++){
-            float distance = 1000f;
+            float distance = 10000f;
             GameObject closestFloor = null;
             for (int j = 0; j < floors.Count; j++) {
-                if (floors[j]!= floors[i]) {
-                    float currentDistance = Vector3.Distance(floors[i].transform.position, floors[j].transform.position);
-                    if (currentDistance<distance) {
+                float currentDistance = Vector3.Distance(floors[i].transform.position, floors[j].transform.position);
+
+                if (currentDistance < distance && currentDistance > 0f) {
                         distance = currentDistance;
                         closestFloor = floors[j];
                     }
-                }
             }
-            Debug.Log(closestFloor.transform.position + " is closest to : " + floors[i].transform.position + " with a distance of : " + distance);
-            Debug.DrawLine(floors[i].transform.position, closestFloor.transform.position, Color.red);
+            //Debug.Log(closestFloor.transform.position + " is closest to : " + floors[i].transform.position + " with a distance of : " + distance);
+            //Debug.DrawLine(floors[i].transform.position, closestFloor.transform.position, Color.red, 20f);
         }
+    }
+
+    void Update(){
+        
     }
 
 }
