@@ -27,9 +27,11 @@ public class person : MonoBehaviour {
 		nameText.text = name;
 	}
 
-	public void Init(int i){
+	public void Init(int i, string n){
 		id = i;
 		GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/people/person" + id);
+		name = n;
+		nameText.text = name;
 	}
 
 	// Use this for initialization
