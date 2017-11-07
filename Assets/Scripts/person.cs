@@ -14,15 +14,17 @@ public class person : MonoBehaviour {
     public float randomWalkRange = 3f;
     NavMeshAgent agent;
 
+	string name;
 
-
-
+	TextMesh nameText;
 
 
 
 	public void Init(){
 		id = Random.Range (1, numSprites+1);
 		GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/people/person" + id);
+		name = globalpara.Instance.getRandomName ();
+		nameText.text = name;
 	}
 
 	public void Init(int i){
@@ -31,8 +33,9 @@ public class person : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         agent = GetComponent<NavMeshAgent>();
+		nameText = transform.GetChild (0).gameObject.GetComponent<TextMesh> ();
 	}
 	
 	// Update is called once per frame
@@ -45,6 +48,7 @@ public class person : MonoBehaviour {
 		data ["position x"].AsFloat = transform.position.x;
 		data ["position y"].AsFloat = transform.position.y;
 		data ["position z"].AsFloat = transform.position.z;
+		data ["name"] = name;
 		data ["id"].AsInt = id;
 		return data;
 	}

@@ -41,6 +41,9 @@ public class globalpara : MonoBehaviour{
 
 	private bool[] eventState;
 
+//	TextAsset nameText;
+	string[] names;
+
 	void Start(){
 		int length = System.Enum.GetNames(typeof(parameters)).Length;
 		parameterValue = new float[length];
@@ -55,6 +58,13 @@ public class globalpara : MonoBehaviour{
 
 		//start with 3 parameters.
 		numActivePara = 3;
+
+		TextAsset nameText = (TextAsset)Resources.Load("texts/firstnames");
+		names = nameText.text.Split("\n"[0]);
+	}
+
+	public string getRandomName(){
+		return names [Random.Range (0, names.Length)];
 	}
 
 	//-----
