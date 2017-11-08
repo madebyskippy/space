@@ -16,6 +16,7 @@ public class manager : MonoBehaviour {
 	[SerializeField] GameObject cube;
 	[SerializeField] GameObject greenPrefab;
 	[SerializeField] GameObject peoplePrefab;
+	[SerializeField] GameObject furnPrefab;
 
 	string fileToLoad;
 
@@ -134,11 +135,12 @@ public class manager : MonoBehaviour {
 			float floorS = json ["container" + i] ["room"] ["floor offset size"];
 			int numG = json ["container" + i] ["room"] ["num greens"];
 			int numP = json ["container" + i] ["room"] ["num ppl"];
-			t.GetComponent<room> ().InitFromSave (d,l,loc,floorT,floorS,numG,numP);
+			int numF = json ["container" + i] ["room"] ["num furn"];
+			t.GetComponent<room> ().InitFromSave (d,l,loc,floorT,floorS,numG,numP,numF);
 			rms.Add (t);
 
 			//greens
-			for (int j=0; j<json ["container" + i] ["room"] ["num greens"]; j++){
+			for (int j=0; j<numG; j++){
 				GameObject newGreen = Instantiate (greenPrefab);
 				newGreen.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
 				newGreen.transform.parent = p.transform;
@@ -151,7 +153,7 @@ public class manager : MonoBehaviour {
 			}
 
 			//people
-			for (int j=0; j<json ["container" + i] ["room"] ["num ppl"]; j++){
+			for (int j=0; j<numP; j++){
 				GameObject newPpl = Instantiate (peoplePrefab);
 				newPpl.transform.parent = p.transform;
 				float posx = json ["container" + i] ["people"] [""+j] ["position x"];
@@ -163,6 +165,18 @@ public class manager : MonoBehaviour {
 				newPpl.GetComponent<person> ().Init (id, name);
 			}
 
+			//furniture
+			for (int j=0; j<numF; j++){
+				GameObject newFurn = Instantiate (furnPrefab);
+				newFurn.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
+				newFurn.transform.parent = p.transform;
+				float posx = json ["container" + i] ["greens"] [""+j] ["position x"];
+				float posy = json ["container" + i] ["greens"] [""+j] ["position y"];
+				float posz = json ["container" + i] ["greens"] [""+j] ["position z"];
+				newFurn.transform.position = new Vector3(posx,posy,posz);
+				newFurn.GetComponent<furniture> ().Init (json ["container" + i] ["greens"] [""+j] ["id"]);
+
+			}
 		}
 
 		//for sliders

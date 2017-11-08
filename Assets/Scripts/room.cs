@@ -23,6 +23,7 @@ public class room : MonoBehaviour {
 
 	int greenToCreate;
 	int peopleToCreate;
+	int furnToCreate;
 
 	List<GameObject> columns = new List <GameObject> ();
 	List<GameObject> beams = new List <GameObject> ();
@@ -33,6 +34,7 @@ public class room : MonoBehaviour {
 	//population stuff
 	[SerializeField] GameObject greenPrefab;
 	[SerializeField] GameObject peoplePrefab;
+	[SerializeField] GameObject furnPrefab;
 	//structures
 	[SerializeField] GameObject beamPrefab;
 	[SerializeField] GameObject floorPrefab;
@@ -66,6 +68,7 @@ public class room : MonoBehaviour {
 		 * 		right now it's just like a filler example ***/
 		greenToCreate = (int)(level * 5); //more trees higher up
 		peopleToCreate = (int)(5 - level * 5); //more people lower down
+		furnToCreate = Random.Range(0,5); //just 0-5 furnitures per room
 
 		Generate ();
 
@@ -89,10 +92,11 @@ public class room : MonoBehaviour {
 		data ["floor offset size"].AsFloat = floorOffsetSize;
 		data ["num greens"].AsInt = greenToCreate;
 		data ["num ppl"].AsInt = peopleToCreate;
+		data ["num furn"].AsInt = furnToCreate;
 		return data;
 	}
 
-	public void InitFromSave(Vector3 d, float l, Vector2 loc, float floorT, float floorS, int green, int people){
+	public void InitFromSave(Vector3 d, float l, Vector2 loc, float floorT, float floorS, int green, int people, int furn){
 		dimensions = d;
 		level = l;
 		location = loc;
@@ -102,6 +106,7 @@ public class room : MonoBehaviour {
 
 		greenToCreate = green;
 		peopleToCreate = people;
+		furnToCreate = furn;
 
 		Generate ();
 	}
@@ -208,6 +213,16 @@ public class room : MonoBehaviour {
 	}
 
 	void GenerateFurniture(){
+		for (int i = 0; i < furnToCreate; i++) {
+			GameObject newFurn = Instantiate (furnPrefab);
+			newFurn.transform.localScale = Vector3.one * 0.5f; //TEMPORARY // TEMPORARY remomved
+			newFurn.transform.parent = this.transform.parent;
+			float posy = -0.5f;
+			float posx = Random.Range(-0.5f,0.5f);
+			float posz = Random.Range(-0.5f,0.5f);
+			newFurn.transform.localPosition = new Vector3(posx,posy,posz);
+			newFurn.GetComponent<furniture> ().Init ();
+		}
 	}
 
 	void BuildFloors() {

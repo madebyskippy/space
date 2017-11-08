@@ -18,7 +18,7 @@ public class person : MonoBehaviour {
 
 	TextMesh nameText;
 
-
+	bool hovering;
 
 	public void Init(){
 		id = Random.Range (1, numSprites+1);
@@ -38,11 +38,18 @@ public class person : MonoBehaviour {
 	void Awake () {
         agent = GetComponent<NavMeshAgent>();
 		nameText = transform.GetChild (0).gameObject.GetComponent<TextMesh> ();
+		hovering = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         WalkRandomly();
+		if (hovering) {
+			nameText.gameObject.SetActive (true);
+		} else {
+			nameText.gameObject.SetActive (false);
+		}
+		hovering = false;
 	}
 
 	public JSONObject export(){
@@ -61,4 +68,8 @@ public class person : MonoBehaviour {
 
         agent.destination = randomWalkRange * Random.insideUnitCircle;
     }
+
+	public void hover(){
+		hovering = true;
+	}
 }
