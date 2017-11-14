@@ -57,7 +57,7 @@ public class globalpara : MonoBehaviour{
 		}
 
 		//start with 3 parameters.
-		numActivePara = 3;
+		numActivePara = 5;
 
 		TextAsset nameText = (TextAsset)Resources.Load("texts/firstnames");
 		names = nameText.text.Split("\n"[0]);
