@@ -73,7 +73,7 @@ public class room : MonoBehaviour {
 		Generate ();
 
         // NO DELAY
-        Fill();
+//        Fill();
         // DELAY
         //Invoke("Fill", 0.2f);
 		
@@ -217,7 +217,7 @@ public class room : MonoBehaviour {
 			GameObject newFurn = Instantiate (furnPrefab);
 			newFurn.transform.localScale = Vector3.one * 0.5f; //TEMPORARY // TEMPORARY remomved
 			newFurn.transform.parent = this.transform.parent;
-			float posy = -0.5f;
+			float posy = 0.5f;
 			float posx = Random.Range(-0.5f,0.5f);
 			float posz = Random.Range(-0.5f,0.5f);
 			newFurn.transform.localPosition = new Vector3(posx,posy,posz);
