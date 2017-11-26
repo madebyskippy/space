@@ -16,8 +16,8 @@ public class connecttest : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			randomizescale ();
-			randomizepos ();
+//			randomizescale ();
+//			randomizepos ();
 			connect ();
 		}
 	}
@@ -40,11 +40,17 @@ public class connecttest : MonoBehaviour {
 
 		float xedge1 = x1 + w1 * xdir;
 		float xedge2 = x2 - w2 * xdir;
-		float xscale = Mathf.Abs (xedge2 - xedge1);
+		float xscale = Mathf.Abs(xedge2 - xedge1);
+		Debug.Log ("//xscale: " + xscale + " //xdir: "+ xdir + " //xedge1 :" +xedge1 + " //xedge2 :" + xedge2);
 		float xpos = xedge1 + xdir * 0.5f * Mathf.Abs (xedge2 - xedge1);
 
-		bridge.transform.position = new Vector3 (xpos,floors [0].transform.position.y, floors [0].transform.position.z);
-		bridge.transform.localScale = new Vector3 (xscale, 0.1f, 0.1f);
+		if (xdir == 1 && xedge1 < xedge2 || xdir == -1 && xedge1 > xedge2) {
+			bridge.transform.position = new Vector3 (xpos, floors [0].transform.position.y, floors [0].transform.position.z);
+			bridge.transform.localScale = new Vector3 (xscale, 0.1f, 0.1f);
+		} else {
+			bridge.transform.position = new Vector3 (5,5,5);
+			bridge.transform.localScale = new Vector3 (1,1,1);
+		}
 
 		float z1 = floors[0].transform.position.z;
 		float z2 = floors[1].transform.position.z;
@@ -59,7 +65,13 @@ public class connecttest : MonoBehaviour {
 		float zscale = Mathf.Abs (zedge2 - zedge1);
 		float zpos = zedge1 + zdir * 0.5f * Mathf.Abs (zedge2 - zedge1);
 
-		bridge2.transform.position = new Vector3 (floors [1].transform.position.x, floors [0].transform.position.y,zpos);
-		bridge2.transform.localScale = new Vector3 (0.1f,0.1f,zscale);
+		if (zdir == 1 && zedge1 < zedge2 || zdir == -1 && zedge1 > zedge2) {
+
+			bridge2.transform.position = new Vector3 (floors [1].transform.position.x, floors [0].transform.position.y, zpos);
+			bridge2.transform.localScale = new Vector3 (0.1f, 0.1f, zscale);
+		} else {
+			bridge2.transform.position = new Vector3 (5,5,5);
+			bridge2.transform.localScale = new Vector3 (1,1,1);
+		}
 	}
 }
