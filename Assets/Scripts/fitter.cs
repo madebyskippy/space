@@ -68,8 +68,8 @@ public class fitter : MonoBehaviour {
 		h = Mathf.Max((int) (height_max * globalpara.Instance.getValue (parameters.height)),1); //mathf.max so it'll never be 0
 
 		//bounds
-		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue (parameters.bounds)),1); //mathf.max so it'll never be 0
-		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue (parameters.bounds)),1); //mathf.max so it'll never be 0
+		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue (parameters.size)),1); //mathf.max so it'll never be 0
+		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue (parameters.size)),1); //mathf.max so it'll never be 0
 
 		//fidelity
 		float fidelity = globalpara.Instance.getValue(parameters.fidelity);
@@ -86,7 +86,7 @@ public class fitter : MonoBehaviour {
 
 		//---------struct para
 		//floor thickness
-		floorThickness = globalpara.Instance.getValue(parameters.floorThickness);
+		floorThickness = globalpara.Instance.getValue(parameters.thickness);
 
 //		Debug.Log("height: "+h+"\nbounds, rows&cols: "+r+", "+c+"\n"+"fidelity, max room size: "+room_size_max+
 //					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+
