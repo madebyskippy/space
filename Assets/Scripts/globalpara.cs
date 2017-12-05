@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum parameters {
-	bounds, height, fidelity, chaos, density, cohesion, 
-	floorThickness
+	stability, size, density, fidelity, chaos,
+
+	walls, thickness, distance, roof, 	//stability
+	width, height, depth,				//size
+	in_out, up_down,					//density
+										//fidelity
+	rooms, structure					//chaos
 };
 
 public enum events {
@@ -36,12 +41,12 @@ public class globalpara : MonoBehaviour{
 
 	[SerializeField] int numPara;
 	int numActivePara;
+	int[] numSmallPara = new int[]{4,3,2,0,2}; //for stab, size, density, fidel, chaos
 
 	private float[] parameterValue;
 
 	private bool[] eventState;
 
-//	TextAsset nameText;
 	string[] names;
 
 	void Start(){
@@ -56,7 +61,7 @@ public class globalpara : MonoBehaviour{
 			eventState [i] = false;
 		}
 
-		//start with 3 parameters.
+		//start with these many parameters.
 		numActivePara = 5;
 
 		TextAsset nameText = (TextAsset)Resources.Load("texts/firstnames");
@@ -71,12 +76,12 @@ public class globalpara : MonoBehaviour{
 	//for parameter value stuff
 	//-----
 
-	public void setValue (parameters para, float val){
-		parameterValue [(int)para] = val;
+	public void setValue (parameters p, float val){
+		parameterValue [(int)p] = val;
 	}
 
-	public float getValue (parameters para){
-		return parameterValue[(int)para];
+	public float getValue (parameters p){
+		return parameterValue[(int)p];
 	}
 
 	public int getNumPara(){
@@ -85,6 +90,10 @@ public class globalpara : MonoBehaviour{
 
 	public int getNumActivePara(){
 		return numActivePara;
+	}
+
+	public int getNumSmallP(parameters p){
+		return numSmallPara [(int)p];
 	}
 
 	//-----

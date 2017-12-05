@@ -15,8 +15,8 @@ public class selector : MonoBehaviour {
 
 	//for display
 	float radius = 125;
-	float offsetx = 25;
-	float offsety = 35;
+	float offsetx = 50;
+	float offsety = 85;
 
 	// Use this for initialization
 	void Start () {
@@ -30,15 +30,25 @@ public class selector : MonoBehaviour {
 	//for overall parameters
 	void fancycircle(){
 		float angle = 2f * Mathf.PI / numActiveParameters;
+		int smallptotal = 0;
 
 		for (int i = 0; i < numActiveParameters; i++) {
 
 			GameObject s = Instantiate (slider,Vector3.zero, Quaternion.identity);
 			s.transform.SetParent(this.transform);
 			s.transform.localPosition = new Vector3 (radius + offsetx, radius + offsety, 0f);
-			s.transform.localScale = new Vector3 (0.75f, 0.75f, 0.75f);
+			s.transform.localScale = Vector3.one * 0.65f;
 			s.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, angle * i * Mathf.Rad2Deg));
 			s.GetComponent<icon> ().seticon ((parameters)i);
+			s.AddComponent<bigSlider> ();
+			s.GetComponent<bigSlider> ().setP ((parameters)i);
+			s.GetComponent<bigSlider> ().prefab (slider);
+			parameters[] small = new parameters[globalpara.Instance.getNumSmallP((parameters)i)];
+			for (int j=0; j<small.Length; j++){
+				small [j] = (parameters)(globalpara.Instance.getNumPara () + smallptotal);
+				smallptotal++;
+			}
+			s.GetComponent<bigSlider> ().setSmallP (small);
 			icons [i] = s;
 			setValue (i, globalpara.Instance.getValue ((parameters)(i)));
 		}
