@@ -12,6 +12,8 @@ public class connections : MonoBehaviour {
     NavMeshSurface navSrf;
 
 	[SerializeField] GameObject bridgePrefab;
+	[SerializeField] GameObject stairs1Prefab;
+	[SerializeField] GameObject stairs2Prefab;
 
 	bool drawDebugLines = false;
 
