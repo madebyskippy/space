@@ -15,11 +15,19 @@ public class room : MonoBehaviour {
 	Vector2 location; //the xy of the room on the level
 
 	// structure parameters
-	float floorThickness;
-	float floorOffsetSize;
 
-	float columnThickness = 0.1f;
-	float columnDistance = 1f;
+	//thickness
+	float globalThickness;
+
+	float floorThickness;
+	float columnThickness;
+	float beamThickness;
+	// disctance
+	float globalDistance;
+
+	float columnDistance;
+
+	float floorOffsetSize;
 
 	int greenToCreate;
 	int peopleToCreate;
@@ -55,12 +63,19 @@ public class room : MonoBehaviour {
 	GameObject myFloor;
 
 	public void Init(Vector3 d, float l, Vector2 loc, float floorT, float floorS){ //temp structure parameters passed on to this function
-	
+
 		dimensions = d;
 		level = l;
 		location = loc;
 
-		floorThickness = floorT;
+		globalThickness = Mathf.Max((globalpara.Instance.getValue (parameters.thickness)),0.1f);
+		floorThickness = globalThickness*0.5f;
+		columnThickness = globalThickness*0.3f;
+		beamThickness = globalThickness*0.3f;
+
+		globalDistance = Mathf.Max((globalpara.Instance.getValue (parameters.distance)),0.1f);
+		columnDistance = globalDistance;
+
 		floorOffsetSize = floorS;
 
 		/***	EDIT THESE TO ADJUST HOW MUCH STUFF GENERATES
@@ -479,8 +494,8 @@ public class room : MonoBehaviour {
 		float beamWidthSecond = 0.05f;
 		float beamHeightSecond = 0.1f;
 		float beamLengthOffset = 0f;
-		float gridDistanceMain = 0.5f;
-		float gridDistanceSecond = 0.3f;
+
+		float gridDistanceSecond = columnDistance*0.5f;
 		bool squareGrid = false;
 		// values depending on parameters
 		float beamHeightOffset = beamHeightSecond / 2;
@@ -494,9 +509,9 @@ public class room : MonoBehaviour {
 		float beamHeightOffsetZ;
 		float gridDistanceX;
 		float gridDistanceZ;
-		int gridDivisionsMain = Mathf.FloorToInt(1f / gridDistanceMain);	// a bit funky, works if our room sizes are full unity unit sizes, no 1.3 or whatever
+		int gridDivisionsMain = Mathf.FloorToInt(1f / columnDistance);	// a bit funky, works if our room sizes are full unity unit sizes, no 1.3 or whatever
 		int gridDivisionsSecond = Mathf.FloorToInt(1f / gridDistanceSecond);
-		gridDistanceMain = 1f / gridDivisionsMain;
+		columnDistance = 1f / gridDivisionsMain;
 		gridDistanceSecond = 1f / gridDivisionsSecond;
 		float gridDivisionsX;
 		float gridDivisionsZ;
@@ -511,8 +526,8 @@ public class room : MonoBehaviour {
 			beamHeightOffsetX = 0f;
 			matZ = mainBeamMat;
 			matX = mainBeamMat;
-			gridDistanceX = gridDistanceMain;
-			gridDistanceZ = gridDistanceMain;
+			gridDistanceX = columnDistance;
+			gridDistanceZ = columnDistance;
 			gridDivisionsX = gridDivisionsMain;
 			gridDivisionsZ = gridDivisionsMain;
 
@@ -525,7 +540,7 @@ public class room : MonoBehaviour {
 			beamHeightOffsetX = 0f;
 			matZ = mainBeamMat;
 			matX = secondBeamMat;
-			gridDistanceZ = gridDistanceMain;
+			gridDistanceZ = columnDistance;
 			gridDistanceX = gridDistanceSecond;
 			gridDivisionsZ = gridDivisionsMain;
 			gridDivisionsX = gridDivisionsSecond;
@@ -538,7 +553,7 @@ public class room : MonoBehaviour {
 			beamHeightOffsetZ = 0f;
 			matX = mainBeamMat;
 			matZ = secondBeamMat;
-			gridDistanceX = gridDistanceMain;
+			gridDistanceX = columnDistance;
 			gridDistanceZ = gridDistanceSecond;
 			gridDivisionsX = gridDivisionsMain;
 			gridDivisionsZ = gridDivisionsSecond;
