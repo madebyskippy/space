@@ -40,15 +40,22 @@ public class selector : MonoBehaviour {
 			s.transform.localScale = Vector3.one * 0.65f;
 			s.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, angle * i * Mathf.Rad2Deg));
 			s.GetComponent<icon> ().seticon ((parameters)i);
-			s.AddComponent<bigSlider> ();
-			s.GetComponent<bigSlider> ().setP ((parameters)i);
-			s.GetComponent<bigSlider> ().prefab (slider);
+			bigSlider bs = s.AddComponent<bigSlider> ();
+			bs.setP ((parameters)i);
+			bs.prefab (slider);
 			parameters[] small = new parameters[globalpara.Instance.getNumSmallP((parameters)i)];
 			for (int j=0; j<small.Length; j++){
 				small [j] = (parameters)(globalpara.Instance.getNumPara () + smallptotal);
 				smallptotal++;
 			}
-			s.GetComponent<bigSlider> ().setSmallP (small);
+			bs.setSmallP (small);
+			bs.setSmallActive (false);
+
+			if (i < 3) { //start with 3
+				bs.setActive (true);
+			} else {
+				bs.setActive (false);
+			}
 			icons [i] = s;
 			setValue (i, globalpara.Instance.getValue ((parameters)(i)));
 		}

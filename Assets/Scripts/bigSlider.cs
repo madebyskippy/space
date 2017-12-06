@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class bigSlider : MonoBehaviour {
 
@@ -10,6 +11,9 @@ public class bigSlider : MonoBehaviour {
 	GameObject[] smallsliders;
 
 	GameObject sliderPrefab;
+
+	bool isActive;
+	bool smallActive;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +37,33 @@ public class bigSlider : MonoBehaviour {
 			s.transform.localScale = Vector3.one * 0.65f;
 			s.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, angle * i * Mathf.Rad2Deg-(360f/5f)*(0.5f*(small.Length-1))));
 			s.GetComponent<icon> ().seticon (small[i]);
+			s.GetComponent<Slider> ().interactable = false;
+			smallsliders [i] = s;
+		}
+	}
+
+	public void setActive(bool a){
+		isActive = a;
+		GetComponent<Slider> ().interactable = isActive;
+		if (!isActive) {
+			for (int i = 0; i < smallsliders.Length; i++) {
+				smallsliders[i].GetComponent<Slider> ().interactable = false;
+			}
+		}
+	}
+
+	public void setSmallActive(bool sa){
+		smallActive = sa;
+		if (smallActive) {
+			GetComponent<Slider> ().interactable = false;
+			for (int i = 0; i < smallsliders.Length; i++) {
+				smallsliders[i].GetComponent<Slider> ().interactable = true;
+			}
+		} else {
+			GetComponent<Slider> ().interactable = true;
+			for (int i = 0; i < smallsliders.Length; i++) {
+				smallsliders[i].GetComponent<Slider> ().interactable = false;
+			}
 		}
 	}
 
@@ -46,6 +77,7 @@ public class bigSlider : MonoBehaviour {
 
 	public void setSmallP(parameters[] s){
 		small = s;
+		smallsliders = new GameObject[small.Length];
 		setSliders ();
 	}
 }
