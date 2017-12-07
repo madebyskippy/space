@@ -39,9 +39,10 @@ public class globalpara : MonoBehaviour{
 	}
 	//========================================================================
 
-	[SerializeField] int numPara;
+	int numPara = 5;
 	int numActivePara;
 	int[] numSmallPara = new int[]{4,3,2,0,2}; //for stab, size, density, fidel, chaos
+	int[] SmallParaStartIndex = new int[5]; //this is stupid but dont fight me
 
 	private float[] parameterValue;
 
@@ -50,6 +51,13 @@ public class globalpara : MonoBehaviour{
 	string[] names;
 
 	void Start(){
+		int total = 0;
+		for (int i = 0; i < numSmallPara.Length; i++) {
+			SmallParaStartIndex [i] = total;
+			total += numSmallPara [i];
+			Debug.Log (SmallParaStartIndex[i]);
+		}
+
 		int length = System.Enum.GetNames(typeof(parameters)).Length;
 		parameterValue = new float[length];
 		for (int i=0; i<length; i++){
@@ -78,6 +86,14 @@ public class globalpara : MonoBehaviour{
 
 	public void setValue (parameters p, float val){
 		parameterValue [(int)p] = val;
+		//if it's a big slider
+		if ((int)p < numPara) {
+			//IT'S BIG!!1
+			//change all the small ones with it
+			for (int i = 0; i < numSmallPara [(int)p]; i++) {
+				parameterValue [numPara+SmallParaStartIndex[(int)p]+i] = val;
+			}
+		}
 	}
 
 	public float getValue (parameters p){

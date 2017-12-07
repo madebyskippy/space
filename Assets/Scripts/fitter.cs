@@ -68,8 +68,8 @@ public class fitter : MonoBehaviour {
 		h = Mathf.Max((int) (height_max * globalpara.Instance.getValue (parameters.height)),1); //mathf.max so it'll never be 0
 
 		//bounds
-		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue (parameters.size)),1); //mathf.max so it'll never be 0
-		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue (parameters.size)),1); //mathf.max so it'll never be 0
+		r = Mathf.Max((int) (row_max * globalpara.Instance.getValue (parameters.width)),1); //mathf.max so it'll never be 0
+		c = Mathf.Max((int) (col_max * globalpara.Instance.getValue (parameters.depth)),1); //mathf.max so it'll never be 0
 
 		//fidelity
 		float fidelity = globalpara.Instance.getValue(parameters.fidelity);
@@ -77,12 +77,12 @@ public class fitter : MonoBehaviour {
 
 		//chaos
 		//variation in room size/dimensions
-		float chaos = globalpara.Instance.getValue(parameters.chaos);
+		float chaos = globalpara.Instance.getValue(parameters.rooms);
 		room_height_max = room_height_min + (int) (chaos * h);
 		room_size_min = Mathf.Max(room_size_max - (int)(room_size_max * chaos),1);
 
 		//density
-		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue (parameters.density)),1);
+		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue (parameters.in_out)),1);
 
 		//---------struct para
 		//floor thickness
@@ -139,7 +139,6 @@ public class fitter : MonoBehaviour {
 			for (int j = 0; j < sizez; j++) {
 				if (full [posx+i, posz+j,level]) {
 					placed = false;
-//					Debug.Log ("overlap");
 					return placed;
 				}
 			}
