@@ -86,6 +86,7 @@ public class room : MonoBehaviour {
 //		furnToCreate = Random.Range(0,5); //just 0-5 furnitures per room
 		float roomArea = d.x*d.y;
 
+
 		Generate ();
 
         // NO DELAY
