@@ -81,9 +81,11 @@ public class room : MonoBehaviour {
 		/***	EDIT THESE TO ADJUST HOW MUCH STUFF GENERATES
 		 * 		ACCORDING TO THE SPECS OF THE ROOM  
 		 * 		right now it's just like a filler example ***/
-		greenToCreate = (int)(level * 5); //more trees higher up
-		peopleToCreate = (int)(5 - level * 5); //more people lower down
-		furnToCreate = Random.Range(0,5); //just 0-5 furnitures per room
+//		greenToCreate = (int)(level * 5); //more trees higher up
+//		peopleToCreate = (int)(5 - level * 5); //more people lower down
+//		furnToCreate = Random.Range(0,5); //just 0-5 furnitures per room
+		float roomArea = d.x*d.y;
+
 
 		Generate ();
 
