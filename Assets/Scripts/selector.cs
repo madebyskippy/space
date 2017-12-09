@@ -49,7 +49,7 @@ public class selector : MonoBehaviour {
 				smallptotal++;
 			}
 			bs.setSmallP (small);
-			bs.setSmallActive (false);
+			bs.setSmallActive (true);
 
 			if (i < 3) { //start with 3
 				bs.setActive (true);
