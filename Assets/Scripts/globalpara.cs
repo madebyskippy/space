@@ -55,13 +55,12 @@ public class globalpara : MonoBehaviour{
 		for (int i = 0; i < numSmallPara.Length; i++) {
 			SmallParaStartIndex [i] = total;
 			total += numSmallPara [i];
-			Debug.Log (SmallParaStartIndex[i]);
 		}
 
 		int length = System.Enum.GetNames(typeof(parameters)).Length;
 		parameterValue = new float[length];
 		for (int i=0; i<length; i++){
-			parameterValue [i] = 1f;
+			parameterValue [i] = 0.75f;
 		}
 		length = System.Enum.GetNames(typeof(events)).Length;
 		eventState = new bool[length];
@@ -94,6 +93,16 @@ public class globalpara : MonoBehaviour{
 				parameterValue [numPara+SmallParaStartIndex[(int)p]+i] = val;
 			}
 		}
+	}
+
+	public float getBigAverage(parameters p){
+		float total = 0;
+		int num = numSmallPara [(int)p];
+		for (int i = 0; i < num; i++) {
+			total += parameterValue [numPara + SmallParaStartIndex [(int)p] + i];
+		}
+
+		return (float)(total / (float)num);
 	}
 
 	public float getValue (parameters p){
