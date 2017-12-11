@@ -83,18 +83,30 @@ public class room : MonoBehaviour {
 		floorOffsetSize = floorS;
 
 		/***	EDIT THESE TO ADJUST HOW MUCH STUFF GENERATES
-		 * 		ACCORDING TO THE SPECS OF THE ROOM  
-		 * 		right now it's just like a filler example ***/
-//		greenToCreate = (int)(level * 5); //more trees higher up
+		 * 		ACCORDING TO THE SPECS OF THE ROOM  ***/
+		greenToCreate = (int)(level * 5); //more trees higher up
 //		peopleToCreate = (int)(5 - level * 5); //more people lower down
-//		furnToCreate = Random.Range(0,5); //just 0-5 furnitures per room
-		float roomArea = d.x*d.y;
+		furnToCreate = Random.Range(0,5); //just 0-5 furnitures per room
+
+		//for people
+		float roomArea = (float)(d.x*d.y) / 100f; //100 is the maximum room area
+		float stabilityinfluence = 1f-l*globalpara.Instance.getBigAverage(parameters.stability);
+		peopleToCreate = (int)Random.Range (1f, 100f * roomArea);
+		peopleToCreate = (int)Mathf.Max(1f,(int)(peopleToCreate*stabilityinfluence));
+//		Debug.Log (roomArea+ "," + stabilityinfluence+","+peopleToCreate);
+
+		//greens
+		greenToCreate = (int)Random.Range(1f,50f*(d.z/10f));
+		greenToCreate = (int)((float)greenToCreate * l);
+		float densityinfluence = 1f-globalpara.Instance.getBigAverage (parameters.density);
+		greenToCreate = (int)((float)greenToCreate * densityinfluence);
+		Debug.Log (d.z + "," +l+","+ densityinfluence+","+greenToCreate);
 
 
 		Generate ();
 
         // NO DELAY
-//        Fill();
+        Fill();
         // DELAY
         //Invoke("Fill", 0.2f);
 		
@@ -237,7 +249,7 @@ public class room : MonoBehaviour {
 	void GenerateFurniture(){
 		for (int i = 0; i < furnToCreate; i++) {
 			GameObject newFurn = Instantiate (furnPrefab);
-			newFurn.transform.localScale = Vector3.one * 0.5f; //TEMPORARY // TEMPORARY remomved
+			newFurn.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
 			newFurn.transform.parent = this.transform.parent;
 			float posy = 0.5f;
 			float posx = Random.Range(-0.5f,0.5f);
