@@ -22,6 +22,7 @@ public class room : MonoBehaviour {
 	float floorThickness;
 	float columnThickness;
 	float beamThickness;
+	float wallThickness;
 	// disctance
 	float globalDistance;
 
@@ -48,6 +49,8 @@ public class room : MonoBehaviour {
 	[SerializeField] GameObject floorPrefab;
 	[SerializeField] GameObject columnPrefab;
 	[SerializeField] GameObject wallPrefab;
+	[SerializeField] GameObject archPrefab;
+	[SerializeField] GameObject archPrefab2;
 	//test beams
 	[SerializeField] Material mainBeamMat;
 	[SerializeField] Material secondBeamMat;
@@ -72,6 +75,7 @@ public class room : MonoBehaviour {
 		floorThickness = globalThickness*0.5f;
 		columnThickness = globalThickness*0.3f;
 		beamThickness = globalThickness*0.3f;
+		wallThickness = globalThickness * 0.5f;
 
 		globalDistance = Mathf.Max((globalpara.Instance.getValue (parameters.distance)),0.1f);
 		columnDistance = globalDistance;
@@ -146,8 +150,9 @@ public class room : MonoBehaviour {
 		//GenerateOutlines ();
 
 		BuildFloors ();
-//		BuildWalls ();
-		BuildColumns ();
+		BuildWalls ();
+//		BuildArchs();
+//		BuildColumns ();
 		BuildBeams ();
 	}
 
@@ -272,82 +277,104 @@ public class room : MonoBehaviour {
 		myFloor = newFloor;
 	}
 
+
+	void BuildArchs() {
+
+		// edges - - - - 
+		SubBuildArchEdge(-1f,-1f);
+		SubBuildArchEdge(-1f,1f);
+		SubBuildArchEdge(1f,-1f);
+		SubBuildArchEdge (1f, 1f);
+
+		// archs - - - - -
+		SubBuildArch(archPrefab2,-1f,0f);
+		SubBuildArch(archPrefab2,1f,0f);
+		SubBuildArch(archPrefab,0f,-1f);
+		SubBuildArch(archPrefab,0f,1f);
+
+		// tops - - - - - 
+
+		SubBuildArchTop(-1f,0f);
+		SubBuildArchTop(1f,0f);
+		SubBuildArchTop(0f,-1f);
+		SubBuildArchTop(0f,1f);
+
+	}
+	void SubBuildArchEdge(float xDir, float zDir) {
+		
+		Vector3 edgePos = new Vector3 (
+			transform.position.x + xDir * (transform.localScale.x * 0.5f),
+			transform.position.y,
+			transform.position.z + zDir * (transform.localScale.z * 0.5f)
+		);
+		Vector3 edgeScale = new Vector3 (wallThickness,transform.localScale.y, wallThickness);
+		GameObject edge = Instantiate (wallPrefab, edgePos, Quaternion.identity);
+		edge.transform.localScale = edgeScale;
+		edge.transform.parent = this.transform.parent;
+	}
+	void SubBuildArch(GameObject prefab, float xDir, float zDir){
+		Vector3 archPos = new Vector3 (
+			transform.position.x + xDir * ( transform.localScale.x / 2),
+			transform.position.y + transform.localScale.y / 3,
+			transform.position.z + zDir * ( transform.localScale.z / 2));
+
+		GameObject newArch = Instantiate (prefab, archPos,Quaternion.identity);
+
+		Vector3 archScale;
+		if (zDir == 0f) {
+			archScale = new Vector3 (wallThickness, transform.localScale.y / 3, transform.localScale.z - wallThickness);
+		} else {
+			archScale = new Vector3 (transform.localScale.x - wallThickness, transform.localScale.y / 3, wallThickness);
+		}
+		newArch.transform.localScale = archScale;
+		newArch.transform.parent = this.transform.parent;
+		
+	}
+	void SubBuildArchTop(float xDir, float zDir) {
+		Vector3 topPos = new Vector3 (
+			transform.position.x + xDir * ( transform.localScale.x / 2),
+			transform.position.y + (transform.localScale.y / 12f) *6f - transform.localScale.y/ 24f,
+			transform.position.z + zDir * ( transform.localScale.z / 2));
+
+		GameObject newTop = Instantiate (wallPrefab, topPos,Quaternion.identity);
+
+		Vector3 topScale;
+		if (zDir == 0f) {
+			topScale = new Vector3 (wallThickness, transform.localScale.y / 12, transform.localScale.z - wallThickness);
+		} else {
+			topScale = new Vector3 (transform.localScale.x - wallThickness, transform.localScale.y / 12, wallThickness);
+		}
+		newTop.transform.localScale = topScale;
+		newTop.transform.parent = this.transform.parent;
+	}
+
 	void BuildWalls() {
 
-		// adjustable parameters
-		float wallThickness = 0.1f;
+		SubBuildWall (0f, 1f);
+		SubBuildWall (0f, -1f);
+		SubBuildWall (1f, 0f);
+		SubBuildWall (-1f, 0f);
 
-		
-//	-	. X		
-//	|		.
-//	+	.
-// 	Z
+	}
 
-		Vector3 newPos1 = new Vector3 (
-			transform.position.x - transform.localScale.x / 2,
+	void SubBuildWall (float xDir, float zDir) {
+
+		Vector3 wallPos = new Vector3 (
+			transform.position.x + xDir *( transform.localScale.x * 0.5f),
 			transform.position.y,
-			transform.position.z);
-			
-		GameObject newWall1 = Instantiate (wallPrefab, newPos1,Quaternion.identity);
+			transform.position.z + zDir *(transform.localScale.z * 0.5f));
 
-		Vector3 newScale1 = new Vector3 (wallThickness, transform.localScale.y, transform.localScale.z);
+		GameObject newWall = Instantiate (wallPrefab, wallPos,Quaternion.identity);
+		Vector3 newScale;
 
-		newWall1.transform.localScale = newScale1;
-        newWall1.transform.parent = this.transform.parent;
+		if (zDir == 0f) {
+			newScale = new Vector3 (wallThickness, transform.localScale.y, transform.localScale.z);
+		} else {
+			newScale = new Vector3 (transform.localScale.x, transform.localScale.y, wallThickness);
+		}
 
-
-//		.	- X	
-//	.		|
-//		.	+
-// 	Z
-
-		Vector3 newPos2 = new Vector3 (
-			transform.position.x + transform.localScale.x / 2,
-			transform.position.y,
-			transform.position.z);
-
-		GameObject newWall2 = Instantiate (wallPrefab, newPos2,Quaternion.identity);
-
-		Vector3 newScale2 = new Vector3 (wallThickness, transform.localScale.y, transform.localScale.z);
-
-		newWall2.transform.localScale = newScale2;
-        newWall2.transform.parent = this.transform.parent;
-
-//	-	_	+ X
-//	.		.
-//		.
-// Z
-	
-		Vector3 newPos3 = new Vector3 (
-			transform.position.x,
-			transform.position.y,
-			transform.position.z - transform.localScale.z / 2);
-
-		GameObject newWall3 = Instantiate (wallPrefab, newPos3,Quaternion.identity);
-
-		Vector3 newScale3 = new Vector3 (transform.localScale.x, transform.localScale.y, wallThickness);
-
-		newWall3.transform.localScale = newScale3;
-        newWall3.transform.parent = this.transform.parent;
-
-//		.	  X
-//	.		.
-//	-	_	+ 
-//  Z
-
-		Vector3 newPos4 = new Vector3 (
-			transform.position.x,
-			transform.position.y,
-			transform.position.z + transform.localScale.z / 2);
-
-		GameObject newWall4 = Instantiate (wallPrefab, newPos4,Quaternion.identity);
-
-		Vector3 newScale4 = new Vector3 (transform.localScale.x, transform.localScale.y, wallThickness);
-
-		newWall4.transform.localScale = newScale4;
-        newWall4.transform.parent = this.transform.parent;
-
-
+		newWall.transform.localScale = newScale;
+		newWall.transform.parent = this.transform.parent;
 	}
 
 	void BuildColumns () {
