@@ -16,7 +16,8 @@ public class fitter : MonoBehaviour {
 	int c=5;
 	int h=10;
 	int room_try_max = 150; //how many times it tries to fit a room
-	int density = 150;
+	float density_updown;
+	float density_inout;
 
 	[SerializeField] int height_max;
 	[SerializeField] int row_max;
@@ -33,6 +34,7 @@ public class fitter : MonoBehaviour {
 
 	bool[,,] full; //whether or not that grid space is full
 	int[] numRooms; //num of rooms on the floor 				-- currently not in use
+	int[] fullSpaces; //number of spaces taken up by a room on the floor
 
 	List<GameObject> rooms;
 
@@ -50,11 +52,13 @@ public class fitter : MonoBehaviour {
 		peopleOnTop = 0;
 		full = new bool[r, c, h];
 		numRooms = new int[h];
+		fullSpaces = new int[h];
 		rooms = new List<GameObject> ();
 		for (int i=0; i<r; i++){
 			for (int j = 0; j < c; j++) {
 				for (int k = 0; k < h; k++) {
 					numRooms [k] = 0;
+					fullSpaces [k] = 0;
 					full [i, j, k] = false;
 				}
 			}
@@ -82,7 +86,8 @@ public class fitter : MonoBehaviour {
 		room_size_min = Mathf.Max(room_size_max - (int)(room_size_max * chaos),1);
 
 		//density
-		density = Mathf.Max((int) (room_try_max * globalpara.Instance.getValue (parameters.in_out)),1);
+		density_updown = Mathf.Max(globalpara.Instance.getValue (parameters.up_down),0.1f);
+		density_inout = Mathf.Max (globalpara.Instance.getValue (parameters.in_out), 0.1f);
 
 		//---------struct para
 		//floor thickness
@@ -100,7 +105,9 @@ public class fitter : MonoBehaviour {
 		clear ();
 
 		for (int i = 0; i < h; i++) {
-			randomPlacement (i);
+			if (i==0 || Random.Range (0f, 1f) < density_updown) {
+				randomPlacement (i);
+			}
 		}
 
         // NO DELAY
@@ -177,6 +184,7 @@ public class fitter : MonoBehaviour {
 			for (int j = 0; j < sizez; j++) {
 				for (int k = 0; k < heightmax; k++){
 					full [posx+i, posz+j, level+k ] = true;
+					fullSpaces [level+k]++;
 				}
 			}
 		}
@@ -193,13 +201,19 @@ public class fitter : MonoBehaviour {
 		int roomsOnLevel = 0;
 		int peopleOnThisLevel = 0;
 		bool roomsexist = false;
-		for (int i = 0; i < density; i++) {
+
+		for (int i = 0; i < 1000; i++) {
 			bool p = place (level);
 			if (p) {
 				roomsOnLevel++;
 				roomsexist = true;
+				if ((float)fullSpaces [level] / (float)(r * c) > density_inout) {
+					//if ya full according to the density
+					break;
+				}
 			}
 		}
+		Debug.Log (fullSpaces [level]);
 		peopleOnThisLevel = globalpara.Instance.getPeople ();
 		if (roomsexist) {
 			//there are rooms on this level
