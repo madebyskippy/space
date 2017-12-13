@@ -29,10 +29,10 @@ public class selector : MonoBehaviour {
 
 	//for overall parameters
 	void fancycircle(){
-		float angle = 2f * Mathf.PI / numActiveParameters;
+		float angle = 2f * Mathf.PI / numCircleParameters;
 		int smallptotal = 0;
 
-		for (int i = 0; i < numActiveParameters; i++) {
+		for (int i = 0; i < numCircleParameters; i++) {
 
 			GameObject s = Instantiate (slider,Vector3.zero, Quaternion.identity);
 			s.transform.SetParent(this.transform);
@@ -49,9 +49,14 @@ public class selector : MonoBehaviour {
 				smallptotal++;
 			}
 			bs.setSmallP (small);
-			bs.setSmallActive (true);
 
-			if (i < 3) { //start with 3
+			if (i < globalpara.Instance.getNumActiveSmallPara ()) {
+				bs.setSmallActive (true);
+			} else {
+				bs.setSmallActive (false);
+			}
+
+			if (i < globalpara.Instance.getNumActivePara()) {
 				bs.setActive (true);
 			} else {
 				bs.setActive (false);
@@ -83,5 +88,23 @@ public class selector : MonoBehaviour {
 
 	public void setValue(int i, float v){
 		icons [i].GetComponent<Slider> ().value = v;
+	}
+
+	//for updating per events
+	public void checkEvents(){
+		for (int i = 0; i < icons.Length; i++) {
+			
+			if (i < globalpara.Instance.getNumActivePara()) {
+				icons[i].GetComponent<bigSlider>().setActive (true);
+			} else {
+				icons[i].GetComponent<bigSlider>().setActive (false);
+			}
+
+			if (i < globalpara.Instance.getNumActiveSmallPara()) {
+				icons[i].GetComponent<bigSlider>().setSmallActive (true);
+			} else {
+				icons[i].GetComponent<bigSlider>().setSmallActive (false);
+			}
+		}
 	}
 }

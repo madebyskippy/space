@@ -103,14 +103,18 @@ public class room : MonoBehaviour {
 		float stabilityinfluence = 1f-l*globalpara.Instance.getBigAverage(parameters.stability);
 		peopleToCreate = (int)Random.Range (1f, 100f * roomArea);
 		peopleToCreate = (int)Mathf.Max(1f,(int)(peopleToCreate*stabilityinfluence));
-//		Debug.Log (roomArea+ "," + stabilityinfluence+","+peopleToCreate);
+		globalpara.Instance.addPeople (peopleToCreate);
 
 		//greens
 		greenToCreate = (int)Random.Range(1f,50f*(d.z/10f));
 		greenToCreate = (int)((float)greenToCreate * l);
 		float densityinfluence = 1f-globalpara.Instance.getBigAverage (parameters.density);
 		greenToCreate = (int)((float)greenToCreate * densityinfluence);
-		Debug.Log (d.z + "," +l+","+ densityinfluence+","+greenToCreate);
+		globalpara.Instance.addGreen (greenToCreate);
+
+		if (peopleToCreate > 3 || greenToCreate > 3) {
+			globalpara.Instance.setState (events.more3peopleandtree, true);
+		}
 
 
 		Generate ();
