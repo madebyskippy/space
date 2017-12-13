@@ -81,7 +81,7 @@ public class room : MonoBehaviour {
 		beamThickness = globalThickness*0.3f;
 		wallThickness = globalThickness * 0.5f;
 
-		globalDistance = Mathf.Max((globalpara.Instance.getValue (parameters.distance)),0.1f);
+		globalDistance = Mathf.Max(1-Mathf.Max((globalpara.Instance.getValue (parameters.distance)),0.1f),0.1f);
 		columnDistance = globalDistance;
 
 		floorOffsetSize = floorS;
@@ -89,7 +89,7 @@ public class room : MonoBehaviour {
 		wallPara = (int)Mathf.Min(Mathf.FloorToInt(globalpara.Instance.getValue (parameters.walls) * 3),2);
 		if (wallPara == 0) {
 		}
-		roofPara = (int)Mathf.Min(Mathf.FloorToInt(globalpara.Instance.getValue (parameters.walls) * 3),2);
+		roofPara = (int)Mathf.Min(Mathf.FloorToInt(globalpara.Instance.getValue (parameters.roof) * 2),2);
 
 
 		/***	EDIT THESE TO ADJUST HOW MUCH STUFF GENERATES
@@ -164,11 +164,21 @@ public class room : MonoBehaviour {
 		//GenerateOutlines ();
 
 		BuildFloors ();
-//		BuildWalls ();
-//		BuildArchs();
-		BuildColumns ();
-//		BuildBeams ();
-		BuildRoofs();
+
+		if (wallPara == 0) {
+			BuildArchs ();	
+		} else if (wallPara == 1) {
+			BuildColumns ();
+		} else {
+			BuildWalls ();
+		}
+
+		if (roofPara == 0) {
+			BuildBeams ();
+		} else {
+			BuildRoofs ();
+		}
+
 	}
 
 	public void Fill(){
