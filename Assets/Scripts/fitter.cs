@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class fitter : MonoBehaviour {
 
-	/*
-	 * 
-	 */
-
 	[SerializeField] GameObject cube;
 	[SerializeField] GameObject group; //container
 
@@ -42,12 +38,16 @@ public class fitter : MonoBehaviour {
 
 	[SerializeField] connections connScript;
 
+	//this is for checking for a certain event
+	int peopleOnTop;
+
 	// Use this for initialization
 	void Start () {
 		initialize ();
 	}
 
 	void initialize(){
+		peopleOnTop = 0;
 		full = new bool[r, c, h];
 		numRooms = new int[h];
 		rooms = new List<GameObject> ();
@@ -92,8 +92,13 @@ public class fitter : MonoBehaviour {
 //					"\nchaos, room height min, max: "+room_height_min+","+room_height_max+
 //					", min room size: "+room_size_min+
 //					"\ndensity: "+density);
+
+		globalpara.Instance.resetGreen ();
+		globalpara.Instance.resetPeople ();
+
 		initialize();
 		clear ();
+
 		for (int i = 0; i < h; i++) {
 			randomPlacement (i);
 		}
@@ -103,6 +108,16 @@ public class fitter : MonoBehaviour {
         // DELAY
         //Invoke("InitConnections", 0.1f);
 
+
+		if (globalpara.Instance.getPeople () < 5) {
+			globalpara.Instance.setState (events.less5people, true);
+		}
+		if (globalpara.Instance.getGreen () > 25) {
+			globalpara.Instance.setState (events.more25trees, true);
+		}
+		if (peopleOnTop < 1) {
+			globalpara.Instance.setState (events.nopeopletop, true);
+		}
 	}
 
 	//used when loading a building
@@ -166,12 +181,34 @@ public class fitter : MonoBehaviour {
 			}
 		}
 		numRooms [level]++;
+
+		if (sizex * sizez > 60) {
+			globalpara.Instance.setState (events.largestroom, true);
+		}
+
 		return placed;
 	}
 
 	void randomPlacement(int level){
+		int roomsOnLevel = 0;
+		int peopleOnThisLevel = 0;
+		bool roomsexist = false;
 		for (int i = 0; i < density; i++) {
-			place (level);
+			bool p = place (level);
+			if (p) {
+				roomsOnLevel++;
+				roomsexist = true;
+			}
+		}
+		peopleOnThisLevel = globalpara.Instance.getPeople ();
+		if (roomsexist) {
+			//there are rooms on this level
+			//and by nature of the for loop, it's the highest level
+			//so check the number of ppl on it
+			peopleOnTop = peopleOnThisLevel;
+		}
+		if (roomsOnLevel < 2) {
+			globalpara.Instance.setState (events.unevenrooms, true);
 		}
 	}
 

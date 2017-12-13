@@ -18,6 +18,9 @@ public class manager : MonoBehaviour {
 	[SerializeField] GameObject peoplePrefab;
 	[SerializeField] GameObject furnPrefab;
 
+	[Header ("for events")]
+	[SerializeField] GameObject[] eventBoxes;
+
 	string fileToLoad;
 
 	void Start(){
@@ -33,7 +36,12 @@ public class manager : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			roomfitter.create ();
-
+			for (int i = 0; i < eventBoxes.Length; i++) {
+				if (globalpara.Instance.getState ((events)i)) {
+					eventBoxes [i].GetComponent<eventBox> ().greyOut ();
+					sliders.checkEvents ();
+				}
+			}
 		}
 
 		if (Input.GetKeyDown (KeyCode.K)) {

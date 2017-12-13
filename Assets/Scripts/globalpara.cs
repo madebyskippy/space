@@ -13,7 +13,12 @@ public enum parameters {
 };
 
 public enum events {
-	peoplemeet
+	less5people //less than 5 people total
+	,largestroom //a room of area at least 60 or something i dont know
+	,more25trees //more than 25 trees total
+	,unevenrooms //no two rooms on same level
+	,nopeopletop //no people on top
+	,more3peopleandtree //more than 3 people AND trees in one room
 };
 
 public class globalpara : MonoBehaviour{
@@ -41,6 +46,7 @@ public class globalpara : MonoBehaviour{
 
 	int numPara = 5;
 	int numActivePara;
+	int numActiveSmallPara;
 	int[] numSmallPara = new int[]{4,3,2,0,2}; //for stab, size, density, fidel, chaos
 	int[] SmallParaStartIndex = new int[5]; //this is stupid but dont fight me
 
@@ -50,7 +56,14 @@ public class globalpara : MonoBehaviour{
 
 	string[] names;
 
+	//for checking events
+	int numPeople;
+	int numGreen;
+
 	void Start(){
+		numPeople = 0;
+		numGreen = 0;
+
 		int total = 0;
 		for (int i = 0; i < numSmallPara.Length; i++) {
 			SmallParaStartIndex [i] = total;
@@ -69,7 +82,8 @@ public class globalpara : MonoBehaviour{
 		}
 
 		//start with these many parameters.
-		numActivePara = 5;
+		numActivePara = 3;
+		numActiveSmallPara = 0;
 
 		TextAsset nameText = (TextAsset)Resources.Load("texts/firstnames");
 		names = nameText.text.Split("\n"[0]);
@@ -117,6 +131,10 @@ public class globalpara : MonoBehaviour{
 		return numActivePara;
 	}
 
+	public int getNumActiveSmallPara(){
+		return numActiveSmallPara;
+	}
+
 	public int getNumSmallP(parameters p){
 		return numSmallPara [(int)p];
 	}
@@ -125,11 +143,40 @@ public class globalpara : MonoBehaviour{
 	//for event state stuff
 	//-----
 
+	public void resetPeople(){
+		numPeople = 0;
+	}
+	public void resetGreen(){
+		numGreen = 0;
+	}
+
+	public void addPeople(int i){
+		numPeople += i;
+	}
+	public void addGreen(int i){
+		numGreen += i;
+	}
+
+	public int getPeople(){
+		return numPeople;
+	}
+	public int getGreen(){
+		return numGreen;
+	}
+
 	public void setState(events e, bool s){
-		eventState [(int)e] = s;
-		//you can do stuff here to set the numactivepara to be higher
-		//(thus giving u more sliders)
-		//(depending on what events have been happened)
+		if (!eventState [(int)e]) {
+			eventState [(int)e] = s;
+			//you can do stuff here to set the numactivepara to be higher
+			//(thus giving u more sliders)
+			//(depending on what events have been happened)
+			if (numActivePara < numPara) {
+				numActivePara++;
+			} else {
+				numActiveSmallPara = (int)Mathf.Min (numActiveSmallPara + 1, 5);
+			}
+			Debug.Log (e.ToString () + " donezo");
+		}
 	}
 	public bool getState(events e){
 		return eventState [(int)e];
