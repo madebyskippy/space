@@ -112,7 +112,7 @@ public class room : MonoBehaviour {
 		greenToCreate = (int)((float)greenToCreate * densityinfluence);
 		globalpara.Instance.addGreen (greenToCreate);
 
-		if (peopleToCreate > 3 || greenToCreate > 3) {
+		if (peopleToCreate > 3 && greenToCreate > 3) {
 			globalpara.Instance.setState (events.more3peopleandtree, true);
 		}
 

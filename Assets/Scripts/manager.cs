@@ -23,6 +23,10 @@ public class manager : MonoBehaviour {
 
 	string fileToLoad;
 
+	List<GameObject[]> stuffs;
+
+	bool buildingdone;
+
 	void Start(){
 		//get all available load files
 		Object[] files = Resources.LoadAll ("Buildings");
@@ -30,16 +34,25 @@ public class manager : MonoBehaviour {
 			loadmenu.options.Add(new Dropdown.OptionData(files[i].name));
 		}
 		fileToLoad = files [0].name;
+
+		stuffs = new List<GameObject[]> ();
+		buildingdone = true;
 	}
 
 
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			roomfitter.create ();
-			for (int i = 0; i < eventBoxes.Length; i++) {
-				if (globalpara.Instance.getState ((events)i)) {
-					eventBoxes [i].GetComponent<eventBox> ().greyOut ();
-					sliders.checkEvents ();
+			if (buildingdone) {
+				Debug.Log ("BUILD!!!");
+				buildingdone = false;
+				roomfitter.create ();
+				hide ();
+				StartCoroutine ("show");
+				for (int i = 0; i < eventBoxes.Length; i++) {
+					if (globalpara.Instance.getState ((events)i)) {
+						eventBoxes [i].GetComponent<eventBox> ().greyOut ();
+						sliders.checkEvents ();
+					}
 				}
 			}
 		}
@@ -53,6 +66,38 @@ public class manager : MonoBehaviour {
 			load ();
 		}
 			
+	}
+
+	void hide(){
+		stuffs.Clear ();
+		GameObject[] floor = GameObject.FindGameObjectsWithTag ("floor");
+		GameObject[] walls = GameObject.FindGameObjectsWithTag ("wall");
+		GameObject[] ppl = GameObject.FindGameObjectsWithTag ("person");
+		GameObject[] green = GameObject.FindGameObjectsWithTag ("green");
+		GameObject[] furn = GameObject.FindGameObjectsWithTag ("furniture");
+		GameObject[] roof = GameObject.FindGameObjectsWithTag ("roof");
+		stuffs.Add (floor);
+		stuffs.Add (walls);
+		stuffs.Add (ppl);
+		stuffs.Add (green);
+		stuffs.Add (furn);
+		stuffs.Add (roof);
+
+		for (int i = 0; i < stuffs.Count; i++) {
+			for (int j = 0; j < stuffs [i].Length; j++) {
+				stuffs [i] [j].SetActive (false);
+			}
+		}
+	}
+
+	IEnumerator show(){
+		for (int i = 0; i < stuffs.Count; i++) {
+			for (int j = 0; j < stuffs [i].Length; j++) {
+				stuffs [i] [j].SetActive (true);
+				yield return new WaitForSeconds(.005f);
+			}
+		}
+		buildingdone = true;
 	}
 
 	public void pickFile(){

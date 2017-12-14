@@ -190,7 +190,7 @@ public class fitter : MonoBehaviour {
 		}
 		numRooms [level]++;
 
-		if (sizex * sizez > 60) {
+		if (sizex * sizez > 50) {
 			globalpara.Instance.setState (events.largestroom, true);
 		}
 
@@ -213,7 +213,6 @@ public class fitter : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log (fullSpaces [level]);
 		peopleOnThisLevel = globalpara.Instance.getPeople ();
 		if (roomsexist) {
 			//there are rooms on this level
