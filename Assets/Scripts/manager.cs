@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using SimpleJSON;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class manager : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class manager : MonoBehaviour {
 	[SerializeField] GameObject building; 
 	[SerializeField] selector sliders;
 	[SerializeField] Dropdown loadmenu;
+	[SerializeField] Camera maincam;
 
 	[Header ("for loading")]
 	[SerializeField] GameObject cube;
@@ -57,13 +59,25 @@ public class manager : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetKeyDown (KeyCode.K)) {
-			Debug.Log ("save the building");
-			save ();
+//		if (Input.GetKeyDown (KeyCode.K)) {
+//			Debug.Log ("save the building");
+//			save ();
+//		}
+//		if (Input.GetKeyDown (KeyCode.L)) {
+//			Debug.Log ("load a building");
+//			load ();
+//		}
+
+		if (Input.GetKeyDown (KeyCode.R)) {
+			SceneManager.LoadScene ("main");
+		}if (Input.GetKeyDown(KeyCode.Escape)) {
+			Application.Quit();
 		}
-		if (Input.GetKeyDown (KeyCode.L)) {
-			Debug.Log ("load a building");
-			load ();
+
+		if (buildingdone) {
+			maincam.backgroundColor = new Color (1f, 0.61f, 0.61f, 0f);
+		} else {
+			maincam.backgroundColor = new Color (0.61f, 0.61f, 0.61f, 0f);
 		}
 			
 	}

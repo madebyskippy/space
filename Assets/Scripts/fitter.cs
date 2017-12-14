@@ -229,7 +229,7 @@ public class fitter : MonoBehaviour {
 		return rooms;
 	}
 
-    // test for later creation of connections
+//     test for later creation of connections
     void InitConnections (){
         connScript.InitializeConnections();
     }

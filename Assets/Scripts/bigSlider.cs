@@ -60,7 +60,9 @@ public class bigSlider : MonoBehaviour {
 				smallsliders[i].GetComponent<Slider> ().interactable = true;
 			}
 		} else {
-			GetComponent<Slider> ().interactable = true;
+			if (isActive) {
+				GetComponent<Slider> ().interactable = true;
+			}
 			for (int i = 0; i < smallsliders.Length; i++) {
 				smallsliders[i].GetComponent<Slider> ().interactable = false;
 			}

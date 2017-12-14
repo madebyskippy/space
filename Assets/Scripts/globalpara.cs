@@ -175,7 +175,7 @@ public class globalpara : MonoBehaviour{
 			} else {
 				numActiveSmallPara = (int)Mathf.Min (numActiveSmallPara + 1, 5);
 			}
-			Debug.Log (e.ToString () + " donezo");
+			Debug.Log (e.ToString () + " donezo "+numActivePara);
 		}
 	}
 	public bool getState(events e){
