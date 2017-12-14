@@ -51,6 +51,7 @@ public class room : MonoBehaviour {
 	//structures
 	[SerializeField] GameObject beamPrefab;
 	[SerializeField] GameObject floorPrefab;
+	[SerializeField] GameObject roofPrefab;
 	[SerializeField] GameObject columnPrefab;
 	[SerializeField] GameObject wallPrefab;
 	[SerializeField] GameObject archPrefab;
@@ -94,7 +95,7 @@ public class room : MonoBehaviour {
 
 		/***	EDIT THESE TO ADJUST HOW MUCH STUFF GENERATES
 		 * 		ACCORDING TO THE SPECS OF THE ROOM  ***/
-		greenToCreate = (int)(level * 5); //more trees higher up
+//		greenToCreate = (int)(level * 5); //more trees higher up
 //		peopleToCreate = (int)(5 - level * 5); //more people lower down
 		furnToCreate = Random.Range(0,5); //just 0-5 furnitures per room
 
@@ -165,18 +166,60 @@ public class room : MonoBehaviour {
 
 		BuildFloors ();
 
+		float chaos = globalpara.Instance.getValue (parameters.structure);
+
 		if (wallPara == 0) {
-			BuildArchs ();	
+			//arch
+			if (Random.Range (0f, 1f) > chaos * 0.5f) {
+				BuildArchs ();	
+			} else {
+				//50 50 chance of the other two
+				if (Random.Range (0f, 1f) > 0.5f) {
+					BuildColumns ();
+				} else {
+					BuildWalls ();
+				}
+			}
 		} else if (wallPara == 1) {
-			BuildColumns ();
+			//col
+			if (Random.Range (0f, 1f) > chaos * 0.5f) {
+				BuildColumns ();
+			} else {
+				//50 50 chance of the other two
+				if (Random.Range (0f, 1f) > 0.5f) {
+					BuildArchs ();
+				} else {
+					BuildWalls ();
+				}
+			}
 		} else {
-			BuildWalls ();
+			//wall
+			if (Random.Range (0f, 1f) > chaos * 0.5f) {
+				BuildWalls ();	
+			} else {
+				//50 50 chance of the other two
+				if (Random.Range (0f, 1f) > 0.5f) {
+					BuildColumns ();
+				} else {
+					BuildArchs ();
+				}
+			}
 		}
 
 		if (roofPara == 0) {
-			BuildBeams ();
+			//beams
+			if (Random.Range (0f, 1f) > chaos * 0.5f) {
+				BuildBeams ();
+			} else {
+				BuildRoofs ();
+			}
 		} else {
-			BuildRoofs ();
+			//roofs
+			if (Random.Range (0f, 1f) > chaos * 0.5f) {
+				BuildRoofs ();
+			} else {
+				BuildBeams ();
+			}
 		}
 
 	}
@@ -374,11 +417,15 @@ public class room : MonoBehaviour {
 	}
 
 	void BuildWalls() {
-
-		SubBuildWall (0f, 1f);
-		SubBuildWall (0f, -1f);
-		SubBuildWall (1f, 0f);
-		SubBuildWall (-1f, 0f);
+		if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildWall (0f, 1f);
+		}if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildWall (0f, -1f);
+		}if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildWall (1f, 0f);
+		}if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildWall (-1f, 0f);
+		}
 
 	}
 	void SubBuildWall (float xDir, float zDir) {
@@ -452,11 +499,15 @@ public class room : MonoBehaviour {
 			transform.position.y,
 			transform.position.z + transform.localScale.z / 2);
 
-
-		SubBuildColumns (false, t_buildBase5);
-		SubBuildColumns (false, t_buildBase6);
-		SubBuildColumns (true, t_buildBase7);
-		SubBuildColumns (true, t_buildBase8);
+		if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildColumns (false, t_buildBase5);
+		}if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildColumns (false, t_buildBase6);
+		}if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildColumns (true, t_buildBase7);
+		}if (Random.Range (0f, 1f) < globalDistance) {
+			SubBuildColumns (true, t_buildBase8);
+		}
 
 
 
@@ -654,7 +705,7 @@ public class room : MonoBehaviour {
 			transform.position.z
 		);
 		Vector3 roofScale = new Vector3 (transform.localScale.x, floorThickness, transform.localScale.z);
-		GameObject newRoof = Instantiate (floorPrefab, buildPos, Quaternion.identity);
+		GameObject newRoof = Instantiate (roofPrefab, buildPos, Quaternion.identity);
 
 		newRoof.transform.localScale = roofScale;
 		newRoof.transform.parent = this.transform.parent;
