@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class mouseScript : MonoBehaviour {
 
@@ -10,22 +12,44 @@ public class mouseScript : MonoBehaviour {
 	float mouseTimer;
 	float mouseStillTime = 4f; //seconds for mouse to be still until stuff fades
 
-	// Use this for initialization
-	void Start () {
+
+    GraphicRaycaster gr;
+    PointerEventData m_PointerEventData;
+    EventSystem es;
+    Canvas canvas;
+
+    [Space(10)]
+    [SerializeField] GameObject joystickRange;
+    [SerializeField] GameObject joystick;
+    bool dragging;
+
+    // Use this for initialization
+    void Start () {
 		mouseTimer = 0f;
+
+        canvas = GetComponent<Canvas>();
+        gr = GetComponent<GraphicRaycaster>();
+        es = GetComponent<EventSystem>();
+
+        dragging = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+        //hover shit -----------------------------------------------------
+
 		RaycastHit hit = new RaycastHit ();
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit)) {
 			GameObject objectHit = hit.transform.gameObject;
 			if (objectHit.tag == "person") {
 				objectHit.GetComponent<person> ().hover();
 			}
-		}
+        }
 
-		Vector3 mousePos = Input.mousePosition;
+        //activity shit -----------------------------------------------------
+
+        Vector3 mousePos = Input.mousePosition;
 		if (mousePos == oldMousePos) {
 			mouseTimer += Time.deltaTime;
 		} else {
@@ -37,5 +61,37 @@ public class mouseScript : MonoBehaviour {
 		if (mouseTimer > mouseStillTime) {
 			allCanvas.SetActive (false);
 		}
-	}
+
+        //joystick shit -----------------------------------------------------
+
+        if (Input.GetMouseButtonDown(0)) {
+            //Set up the new Pointer Event
+            m_PointerEventData = new PointerEventData(es);
+            //Set the Pointer Event Position to that of the mouse position
+            m_PointerEventData.position = Input.mousePosition;
+
+            //Create a list of Raycast Results
+            List<RaycastResult> results = new List<RaycastResult>();
+
+            //Raycast using the Graphics Raycaster and mouse click position
+            gr.Raycast(m_PointerEventData, results);
+            
+            if (results[0].gameObject == joystick) {
+                dragging = true;
+            }
+        }
+        if (Input.GetMouseButtonUp(0)) {
+            dragging = false;
+        }
+
+        if (dragging) {
+            Vector3 dragPosition = Input.mousePosition;
+            Vector3 direction = dragPosition - joystickRange.transform.position; //keep it inside circle
+            //TODO this isn't working.
+            if (direction.magnitude > joystickRange.GetComponent<RectTransform>().rect.width* canvas.scaleFactor) {
+                dragPosition = joystickRange.transform.position + dragPosition.normalized * joystickRange.GetComponent<RectTransform>().rect.width* canvas.scaleFactor;
+            }
+            joystick.transform.position = dragPosition;
+        }
+    }
 }
