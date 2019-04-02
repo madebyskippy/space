@@ -293,10 +293,10 @@ public class room : MonoBehaviour {
 			GameObject newGreen = Instantiate (greenPrefab);
 			newGreen.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
             newGreen.transform.parent = this.transform.parent;
-			float posy = -0.5f;
-			float posx = Random.Range(-0.5f,0.5f);
-			float posz = Random.Range(-0.5f,0.5f);
-			newGreen.transform.localPosition = new Vector3(posx,posy,posz);
+   //         float posy = 0+ floorThickness;// -0.5f;
+   //         float posx = Random.Range(0f, dimensions.x);// -0.5f,0.5f);
+			//float posz = Random.Range(0f, dimensions.y);//-0.5f,0.5f);
+            newGreen.transform.localPosition = randomPositionInRoom();
 			newGreen.GetComponent<green> ().Init ();
 		}
 	}
@@ -306,10 +306,10 @@ public class room : MonoBehaviour {
 			GameObject newPpl = Instantiate (peoplePrefab);
 			//newPpl.transform.localScale = Vector3.one * 0.5f; //TEMPORARY // TEMPORARY remomved
             newPpl.transform.parent = this.transform.parent;
-			float posy = -0.5f;
-			float posx = Random.Range(-0.5f,0.5f);
-			float posz = Random.Range(-0.5f,0.5f);
-			newPpl.transform.localPosition = new Vector3(posx,posy,posz);
+   //         float posy = 0+ floorThickness;// -0.5f;
+			//float posx = Random.Range(0f, dimensions.x);//-0.5f,0.5f);
+   //         float posz = Random.Range(0f, dimensions.y);//-0.5f,0.5f);
+            newPpl.transform.localPosition = randomPositionInRoom();
 			newPpl.GetComponent<person> ().Init ();
 		}
 	}
@@ -319,13 +319,20 @@ public class room : MonoBehaviour {
 			GameObject newFurn = Instantiate (furnPrefab);
 			newFurn.transform.localScale = Vector3.one * 0.5f; //TEMPORARY
 			newFurn.transform.parent = this.transform.parent;
-			float posy = 0.5f;
-			float posx = Random.Range(-0.5f,0.5f);
-			float posz = Random.Range(-0.5f,0.5f);
-			newFurn.transform.localPosition = new Vector3(posx,posy,posz);
+   //         float posy = 0+ floorThickness;// 0.5f;
+			//float posx = Random.Range(0f, dimensions.x);//-0.5f,0.5f);
+   //         float posz = Random.Range(0f, dimensions.y);//-0.5f,0.5f);
+			newFurn.transform.localPosition = randomPositionInRoom();
 			newFurn.GetComponent<furniture> ().Init ();
 		}
 	}
+
+    Vector3 randomPositionInRoom() {
+        float posy = 0 + floorThickness;// 0.5f;
+        float posx = Random.Range(dimensions.x * 0.1f, dimensions.x*0.9f);
+        float posz = Random.Range(dimensions.y * 0.1f, dimensions.y*0.9f);
+        return new Vector3(posx, posy, posz);
+    }
 
 	void BuildFloors() {
 
