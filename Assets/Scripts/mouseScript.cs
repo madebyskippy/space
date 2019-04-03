@@ -19,8 +19,11 @@ public class mouseScript : MonoBehaviour {
     Canvas canvas;
 
     [Space(10)]
+    [SerializeField] float cameraSpeed;
+    [SerializeField] GameObject cameraPivot;
     [SerializeField] GameObject joystickRange;
     [SerializeField] GameObject joystick;
+    [SerializeField] Text label;
     bool dragging;
     float joystickRangeRadius;
     float joystickRadius;
@@ -96,5 +99,12 @@ public class mouseScript : MonoBehaviour {
             }
             joystick.transform.position = dragPosition;
         }
+        Vector3 joystickDirection = joystick.transform.position-joystickRange.transform.position;
+
+        float inputH1 = Vector3.Dot(joystickDirection, new Vector3(1, 0, 0)) / joystickRangeRadius;
+        float inputV1 = Vector3.Dot(joystickDirection, new Vector3(0, 1, 0)) / joystickRangeRadius;
+
+        cameraPivot.transform.RotateAround(cameraPivot.transform.position, Vector3.up, -inputH1 * cameraSpeed * Time.deltaTime);
+        cameraPivot.transform.RotateAround(cameraPivot.transform.position, cameraPivot.transform.right, inputV1 * cameraSpeed * Time.deltaTime);
     }
 }
