@@ -22,6 +22,8 @@ public class mouseScript : MonoBehaviour {
     [SerializeField] GameObject joystickRange;
     [SerializeField] GameObject joystick;
     bool dragging;
+    float joystickRangeRadius;
+    float joystickRadius;
 
     // Use this for initialization
     void Start () {
@@ -32,7 +34,9 @@ public class mouseScript : MonoBehaviour {
         es = GetComponent<EventSystem>();
 
         dragging = false;
-	}
+        joystickRangeRadius = joystickRange.GetComponent<RectTransform>().rect.width * canvas.scaleFactor * 0.5f;
+        joystickRadius = joystick.GetComponent<RectTransform>().rect.width * joystick.transform.localScale.x * canvas.scaleFactor * 0.5f;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -87,9 +91,8 @@ public class mouseScript : MonoBehaviour {
         if (dragging) {
             Vector3 dragPosition = Input.mousePosition;
             Vector3 direction = dragPosition - joystickRange.transform.position; //keep it inside circle
-            //TODO this isn't working.
-            if (direction.magnitude > joystickRange.GetComponent<RectTransform>().rect.width* canvas.scaleFactor) {
-                dragPosition = joystickRange.transform.position + dragPosition.normalized * joystickRange.GetComponent<RectTransform>().rect.width* canvas.scaleFactor;
+            if (direction.magnitude > joystickRangeRadius-joystickRadius) {
+                dragPosition = joystickRange.transform.position + direction.normalized * (joystickRangeRadius-joystickRadius);
             }
             joystick.transform.position = dragPosition;
         }
