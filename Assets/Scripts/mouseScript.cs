@@ -22,10 +22,12 @@ public class mouseScript : MonoBehaviour {
     [SerializeField] float cameraSpeed;
     [SerializeField] GameObject cameraPivot;
     [SerializeField] GameObject joystickRange;
+    [SerializeField] GameObject joystickNullRange;
     [SerializeField] GameObject joystick;
     [SerializeField] Text label;
     bool dragging;
     float joystickRangeRadius;
+    float joystickNullRadius;
     float joystickRadius;
 
     // Use this for initialization
@@ -37,8 +39,9 @@ public class mouseScript : MonoBehaviour {
         es = GetComponent<EventSystem>();
 
         dragging = false;
-        joystickRangeRadius = joystickRange.GetComponent<RectTransform>().rect.width * canvas.scaleFactor * 0.5f;
+        joystickRangeRadius = joystickRange.GetComponent<RectTransform>().rect.width * joystickRange.transform.localScale.x * canvas.scaleFactor * 0.5f;
         joystickRadius = joystick.GetComponent<RectTransform>().rect.width * joystick.transform.localScale.x * canvas.scaleFactor * 0.5f;
+        joystickNullRadius = joystickNullRange.GetComponent<RectTransform>().rect.width * joystickNullRange.transform.localScale.x * canvas.scaleFactor * 0.5f;
     }
 	
 	// Update is called once per frame
@@ -99,10 +102,17 @@ public class mouseScript : MonoBehaviour {
             }
             joystick.transform.position = dragPosition;
         }
+
+
         Vector3 joystickDirection = joystick.transform.position-joystickRange.transform.position;
 
         float inputH1 = Vector3.Dot(joystickDirection, new Vector3(1, 0, 0)) / joystickRangeRadius;
         float inputV1 = Vector3.Dot(joystickDirection, new Vector3(0, 1, 0)) / joystickRangeRadius;
+
+        if (joystickDirection.magnitude < joystickNullRadius - joystickRadius) {
+            inputH1 = 0;
+            inputV1 = 0;
+        }
 
         cameraPivot.transform.RotateAround(cameraPivot.transform.position, Vector3.up, -inputH1 * cameraSpeed * Time.deltaTime);
         cameraPivot.transform.RotateAround(cameraPivot.transform.position, cameraPivot.transform.right, inputV1 * cameraSpeed * Time.deltaTime);
